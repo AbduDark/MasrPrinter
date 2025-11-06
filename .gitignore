@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Replit specific
+.config/
+.cache/
+.upm/
+replit.nix

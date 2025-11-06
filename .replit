@@ -1,0 +1,30 @@
+modules = ["dotnet-7.0", "dotnet-8.0"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+packages = ["wine64", "winetricks", "xorg.libX11", "xorg.libXext", "xorg.libXrender"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "MasrPrinter"
+
+[[workflows.workflow]]
+name = "MasrPrinter"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd MasrPrinter && dotnet run"
+
+[workflows.workflow.metadata]
+outputType = "console"
