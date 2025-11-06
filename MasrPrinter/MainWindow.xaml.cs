@@ -222,23 +222,23 @@ namespace MasrPrinter
             {
                 var settings = PrinterSettings.Instance;
                 
-                if (int.TryParse(PaperWidthTextBox.Text, out int width) && width >= 30 && width <= 150)
+                if (int.TryParse(PaperWidthTextBox.Text, out int width) && width > 0)
                 {
                     settings.PaperWidth = width;
                 }
                 else
                 {
-                    MessageBox.Show("الرجاء إدخال عرض صحيح (30-150 مم)", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("الرجاء إدخال عرض صحيح (أكبر من 0 مم)", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (int.TryParse(PaperHeightTextBox.Text, out int height) && height >= 20 && height <= 100)
+                if (int.TryParse(PaperHeightTextBox.Text, out int height) && height > 0)
                 {
                     settings.PaperHeight = height;
                 }
                 else
                 {
-                    MessageBox.Show("الرجاء إدخال ارتفاع صحيح (20-100 مم)", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("الرجاء إدخال ارتفاع صحيح (أكبر من 0 مم)", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
