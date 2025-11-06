@@ -90,6 +90,25 @@ However, it cannot be executed due to WPF's Windows-only requirement.
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-06: **Modern UI Redesign with Gradient Theme**
+  - **COMPLETE UI OVERHAUL**: Redesigned all 4 windows with modern gradient-based color system
+  - New purple/pink gradient theme (#6A1B9A, #8E24AA, #E91E63) instead of blue/orange
+  - Enhanced visual hierarchy with card-based layouts and shadow effects
+  - Updated all windows: MainWindow, CustomPrintWindow, BatchPrintWindow, SettingsWindow
+  - Modern button styles with hover effects and gradient backgrounds
+  - Improved iconography with emoji and Material Design-inspired elements
+  - Professional Arabic typography with better spacing and readability
+  
+- 2025-11-06: **Enhanced BarcodeGenerator with High-Quality Printing**
+  - **CRITICAL FIX**: Improved print quality with DPI-aware image generation
+  - High-quality graphics rendering (SmoothingMode, InterpolationMode, PixelOffsetMode)
+  - Proper DPI scaling from settings (150-600 DPI support)
+  - Custom paper size support with mm to pixel conversion
+  - Advanced error handling with Arabic error messages
+  - Fixed nullable reference warnings (clean build: 0 errors, 0 warnings)
+  - PNG encoder optimization for maximum quality (Quality=100)
+  - Smart barcode layout with proper margins and spacing
+  
 - 2025-11-06: **Physical Printing and Enhanced Settings**
   - **MAJOR**: Added actual printing functionality to both Batch and Custom print windows
   - Printer selection from installed system printers
@@ -99,20 +118,3 @@ All generated labels are saved to the `prints/` folder as PNG images.
   - Print jobs are isolated per label (no race conditions)
   - Proper resource disposal after each print
   - Input validation for paper dimensions (width: 30-150mm, height: 20-100mm)
-  
-- 2025-11-06: **Enhanced Settings and Printer Integration**
-  - Added printer selection from installed system printers
-  - Added custom default number field in settings
-  - Integrated with Windows printer system (System.Drawing.Printing)
-  - Custom number auto-populates in Custom Print window
-  - Improved user experience with printer detection
-  
-- 2025-11-06: Complete WPF redesign
-  - Removed console fallback, full WPF on net8.0-windows
-  - Created professional Arabic UI with RTL support
-  - Added 3 specialized windows (Batch, Custom, Settings)
-  - Implemented live preview system
-  - Added Material Design-inspired theming
-  - Integrated QRCoder and BarcodeLib libraries
-  - Built complete barcode generation system
-  - Project builds cleanly with 0 errors, 0 warnings
