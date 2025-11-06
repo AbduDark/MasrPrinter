@@ -186,8 +186,10 @@ namespace MasrPrinter
             {
                 using var qrGenerator = new QRCodeGenerator();
                 using var qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
-                using var qrCode = new QRCoder.QRCode(qrCodeData);
-                return qrCode.GetGraphic(20);
+                using var qrCode = new PngByteQRCode(qrCodeData);
+                byte[] qrBytes = qrCode.GetGraphic(20);
+                using var ms = new MemoryStream(qrBytes);
+                return new Bitmap(ms);
             }
             else
             {
