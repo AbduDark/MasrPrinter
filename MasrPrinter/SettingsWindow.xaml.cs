@@ -1,5 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Drawing.Printing;
+using System.Linq;
 
 namespace MasrPrinter
 {
@@ -8,8 +10,33 @@ namespace MasrPrinter
         public SettingsWindow()
         {
             InitializeComponent();
+            LoadPrinters();
             LoadSettings();
             UpdateSizePreview();
+        }
+
+        private void LoadPrinters()
+        {
+            try
+            {
+                PrinterComboBox.Items.Clear();
+                
+                foreach (string printerName in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
+                {
+                    PrinterComboBox.Items.Add(printerName);
+                }
+
+                if (PrinterComboBox.Items.Count == 0)
+                {
+                    PrinterComboBox.Items.Add("لا توجد طابعات متعرفة");
+                    PrinterComboBox.IsEnabled = false;
+                }
+            }
+            catch
+            {
+                PrinterComboBox.Items.Add("خطأ في تحميل الطابعات");
+                PrinterComboBox.IsEnabled = false;
+            }
         }
 
         private void LoadSettings()
@@ -19,6 +46,16 @@ namespace MasrPrinter
             PaperHeightSlider.Value = settings.PaperHeight;
             ThermalLevelSlider.Value = settings.ThermalLevel;
             BarcodeQualitySlider.Value = settings.BarcodeQuality;
+            CustomNumberTextBox.Text = settings.CustomNumber;
+            
+            if (!string.IsNullOrEmpty(settings.SelectedPrinter) && PrinterComboBox.Items.Contains(settings.SelectedPrinter))
+            {
+                PrinterComboBox.SelectedItem = settings.SelectedPrinter;
+            }
+            else if (PrinterComboBox.Items.Count > 0)
+            {
+                PrinterComboBox.SelectedIndex = 0;
+            }
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -45,6 +82,12 @@ namespace MasrPrinter
             settings.PaperHeight = (int)PaperHeightSlider.Value;
             settings.ThermalLevel = (int)ThermalLevelSlider.Value;
             settings.BarcodeQuality = (int)BarcodeQualitySlider.Value;
+            settings.CustomNumber = CustomNumberTextBox.Text;
+            
+            if (PrinterComboBox.SelectedItem != null)
+            {
+                settings.SelectedPrinter = PrinterComboBox.SelectedItem.ToString() ?? "";
+            }
 
             MessageBox.Show("تم حفظ الإعدادات بنجاح!", "نجح", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();

@@ -81,7 +81,12 @@
                     <StackPanel>
                         <TextBlock Text="إعدادات الطابعة" Style="{StaticResource SubtitleText}"/>
                         
-                        <TextBlock Text="مستوى الحرارة (0-100):" Style="{StaticResource LabelText}"/>
+                        <TextBlock Text="اختيار الطابعة:" Style="{StaticResource LabelText}"/>
+                        <ComboBox x:Name="PrinterComboBox" 
+                                  Style="{StaticResource ModernComboBox}"
+                                  Margin="10"/>
+
+                        <TextBlock Text="مستوى الحرارة (0-100):" Style="{StaticResource LabelText}" Margin="10,10,10,5"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -128,6 +133,23 @@
                                        Width="80"
                                        FontWeight="Bold"/>
                         </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource CardPanel}" Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock Text="الرقم المخصص" Style="{StaticResource SubtitleText}"/>
+                        
+                        <TextBlock Text="الرقم الافتراضي للطباعة:" Style="{StaticResource LabelText}"/>
+                        <TextBox x:Name="CustomNumberTextBox" 
+                                 Text="1" 
+                                 Style="{StaticResource ModernTextBox}"/>
+                        
+                        <Border Background="#E3F2FD" CornerRadius="8" Padding="15" Margin="10,15,10,0">
+                            <TextBlock Text="💡 هذا الرقم سيستخدم كقيمة افتراضية في نافذة الطباعة المخصصة" 
+                                       Foreground="{StaticResource PrimaryColor}" 
+                                       TextWrapping="Wrap"/>
+                        </Border>
                     </StackPanel>
                 </Border>
 

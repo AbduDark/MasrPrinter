@@ -29,10 +29,14 @@ MasrPrinter is a professional .NET 8.0 WPF (Windows Presentation Foundation) des
 - ✨ **Professional Arabic Interface**: Full RTL support with modern Material Design-inspired UI
 - 📦 **Batch Printing**: Generate multiple sequential labels with live preview
 - 🎨 **Custom Printing**: Create single labels with custom text/numbers
-- ⚙️ **Settings**: Configure paper size, thermal level, and barcode quality
+- ⚙️ **Advanced Settings**: 
+  - Configure paper size, thermal level, and barcode quality
+  - Select from installed system printers
+  - Set custom default number for printing
 - 🔍 **Live Preview**: See barcodes before printing
 - 💾 **PNG Export**: Save all labels as high-quality PNG images
 - 📊 **Dual Barcode Support**: Code128 (linear) and QR Code (2D)
+- 🖨️ **Printer Integration**: Automatic detection and selection of system printers
 
 ## Running the Application
 
@@ -76,14 +80,23 @@ However, it cannot be executed due to WPF's Windows-only requirement.
 
 ### Settings Window
 - Paper width and height sliders (30-150mm × 20-100mm)
+- **Printer selection** from installed system printers
 - Thermal level control (0-100)
 - Barcode quality (150-600 DPI)
+- **Custom default number** for printing
 - Live size preview
 
 ## Output
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-06: **Enhanced Settings and Printer Integration**
+  - Added printer selection from installed system printers
+  - Added custom default number field in settings
+  - Integrated with Windows printer system (System.Drawing.Printing)
+  - Custom number auto-populates in Custom Print window
+  - Improved user experience with printer detection
+  
 - 2025-11-06: Complete WPF redesign
   - Removed console fallback, full WPF on net8.0-windows
   - Created professional Arabic UI with RTL support

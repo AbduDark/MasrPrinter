@@ -12,6 +12,7 @@ namespace MasrPrinter
         public CustomPrintWindow()
         {
             InitializeComponent();
+            CustomTextBox.Text = PrinterSettings.Instance.CustomNumber;
             UpdatePreview();
         }
 
