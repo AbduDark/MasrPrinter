@@ -68,10 +68,14 @@ The unified interface contains:
 - Printer selection from installed system printers
 - Paper dimensions (width: 30-150mm, height: 20-100mm)
 - Barcode quality (DPI: 150-600)
+- Thermal level control (0-100)
+- Text size configuration
+- Barcode size configuration
 - 2x1 mode toggle (number above, barcode below)
 - Barcode positioning (X/Y in millimeters)
 - Barcode dimensions (height/width in millimeters)
 - Font sizes (Number and Hashtag)
+- Bar width control (Narrow and Wide)
 
 **📋 Print Mode Selection:**
 - Radio buttons to switch between Batch Print and Custom Print
