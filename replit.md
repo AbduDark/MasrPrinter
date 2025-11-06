@@ -90,6 +90,16 @@ However, it cannot be executed due to WPF's Windows-only requirement.
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-06: **Physical Printing and Enhanced Settings**
+  - **MAJOR**: Added actual printing functionality to both Batch and Custom print windows
+  - Printer selection from installed system printers
+  - Paper size settings now use TextBox input instead of sliders
+  - Custom paper dimensions applied to print jobs (mm to hundredths of inch conversion)
+  - Custom default number field in settings
+  - Print jobs are isolated per label (no race conditions)
+  - Proper resource disposal after each print
+  - Input validation for paper dimensions (width: 30-150mm, height: 20-100mm)
+  
 - 2025-11-06: **Enhanced Settings and Printer Integration**
   - Added printer selection from installed system printers
   - Added custom default number field in settings

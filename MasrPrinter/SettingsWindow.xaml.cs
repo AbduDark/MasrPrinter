@@ -42,8 +42,8 @@ namespace MasrPrinter
         private void LoadSettings()
         {
             var settings = PrinterSettings.Instance;
-            PaperWidthSlider.Value = settings.PaperWidth;
-            PaperHeightSlider.Value = settings.PaperHeight;
+            PaperWidthTextBox.Text = settings.PaperWidth.ToString();
+            PaperHeightTextBox.Text = settings.PaperHeight.ToString();
             ThermalLevelSlider.Value = settings.ThermalLevel;
             BarcodeQualitySlider.Value = settings.BarcodeQuality;
             CustomNumberTextBox.Text = settings.CustomNumber;
@@ -63,12 +63,27 @@ namespace MasrPrinter
             UpdateSizePreview();
         }
 
+        private void PaperSize_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateSizePreview();
+        }
+
         private void UpdateSizePreview()
         {
             if (SizePreviewBorder == null) return;
 
-            double widthMm = PaperWidthSlider.Value;
-            double heightMm = PaperHeightSlider.Value;
+            double widthMm = 80;
+            double heightMm = 50;
+
+            if (double.TryParse(PaperWidthTextBox.Text, out double width))
+            {
+                widthMm = width;
+            }
+
+            if (double.TryParse(PaperHeightTextBox.Text, out double height))
+            {
+                heightMm = height;
+            }
 
             double scale = 2.0;
             SizePreviewBorder.Width = widthMm * scale;
@@ -78,8 +93,27 @@ namespace MasrPrinter
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             var settings = PrinterSettings.Instance;
-            settings.PaperWidth = (int)PaperWidthSlider.Value;
-            settings.PaperHeight = (int)PaperHeightSlider.Value;
+            
+            if (int.TryParse(PaperWidthTextBox.Text, out int width) && width >= 30 && width <= 150)
+            {
+                settings.PaperWidth = width;
+            }
+            else
+            {
+                MessageBox.Show("الرجاء إدخال عرض صحيح (30-150 مم)", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (int.TryParse(PaperHeightTextBox.Text, out int height) && height >= 20 && height <= 100)
+            {
+                settings.PaperHeight = height;
+            }
+            else
+            {
+                MessageBox.Show("الرجاء إدخال ارتفاع صحيح (20-100 مم)", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             settings.ThermalLevel = (int)ThermalLevelSlider.Value;
             settings.BarcodeQuality = (int)BarcodeQualitySlider.Value;
             settings.CustomNumber = CustomNumberTextBox.Text;

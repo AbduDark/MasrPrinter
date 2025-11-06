@@ -28,52 +28,16 @@
                         <TextBlock Text="مواصفات الورق" Style="{StaticResource SubtitleText}"/>
                         
                         <TextBlock Text="عرض الورق (مم):" Style="{StaticResource LabelText}"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Slider x:Name="PaperWidthSlider" 
-                                    Grid.Column="0"
-                                    Minimum="30" 
-                                    Maximum="150" 
-                                    Value="80"
-                                    TickFrequency="10"
-                                    IsSnapToTickEnabled="True"
-                                    Margin="10"
-                                    VerticalAlignment="Center"
-                                    ValueChanged="Slider_ValueChanged"/>
-                            <TextBlock Grid.Column="1" 
-                                       Text="{Binding Value, ElementName=PaperWidthSlider, StringFormat={}{0:0} مم}" 
-                                       Style="{StaticResource BodyText}"
-                                       VerticalAlignment="Center"
-                                       Width="80"
-                                       FontWeight="Bold"/>
-                        </Grid>
+                        <TextBox x:Name="PaperWidthTextBox" 
+                                 Text="80" 
+                                 Style="{StaticResource ModernTextBox}"
+                                 TextChanged="PaperSize_TextChanged"/>
 
-                        <TextBlock Text="ارتفاع الورق (مم):" Style="{StaticResource LabelText}" Margin="10,20,10,5"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Slider x:Name="PaperHeightSlider" 
-                                    Grid.Column="0"
-                                    Minimum="20" 
-                                    Maximum="100" 
-                                    Value="50"
-                                    TickFrequency="10"
-                                    IsSnapToTickEnabled="True"
-                                    Margin="10"
-                                    VerticalAlignment="Center"
-                                    ValueChanged="Slider_ValueChanged"/>
-                            <TextBlock Grid.Column="1" 
-                                       Text="{Binding Value, ElementName=PaperHeightSlider, StringFormat={}{0:0} مم}" 
-                                       Style="{StaticResource BodyText}"
-                                       VerticalAlignment="Center"
-                                       Width="80"
-                                       FontWeight="Bold"/>
-                        </Grid>
+                        <TextBlock Text="ارتفاع الورق (مم):" Style="{StaticResource LabelText}"/>
+                        <TextBox x:Name="PaperHeightTextBox" 
+                                 Text="50" 
+                                 Style="{StaticResource ModernTextBox}"
+                                 TextChanged="PaperSize_TextChanged"/>
                     </StackPanel>
                 </Border>
 

@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Drawing;
+using System.Drawing.Printing;
 
 namespace MasrPrinter
 {
@@ -66,13 +68,15 @@ namespace MasrPrinter
                     string fileName = Path.Combine("prints", $"label_{i}.png");
                     BarcodeGenerator.SaveLabel(i.ToString(), currentBarcodeType, fileName);
                     
+                    PrintLabel(fileName);
+                    
                     PrintProgressBar.Value = i - start + 1;
                     ProgressText.Text = $"تم طباعة {PrintProgressBar.Value} من {PrintProgressBar.Maximum}";
                     
-                    await System.Threading.Tasks.Task.Delay(10);
+                    await System.Threading.Tasks.Task.Delay(500);
                 }
 
-                MessageBox.Show($"تم طباعة {end - start + 1} ملصق بنجاح في مجلد prints", 
+                MessageBox.Show($"تم طباعة {end - start + 1} ملصق بنجاح!", 
                     "نجح", MessageBoxButton.OK, MessageBoxImage.Information);
                 
                 ProgressText.Text = "اكتملت الطباعة بنجاح! ✓";
@@ -80,6 +84,44 @@ namespace MasrPrinter
             catch (Exception ex)
             {
                 MessageBox.Show($"خطأ في الطباعة: {ex.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void PrintLabel(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(filePath)) return;
+                
+                var printDoc = new PrintDocument();
+                var settings = PrinterSettings.Instance;
+                
+                if (!string.IsNullOrEmpty(settings.SelectedPrinter))
+                {
+                    printDoc.PrinterSettings.PrinterName = settings.SelectedPrinter;
+                }
+                
+                int widthInHundredthsOfInch = (int)(settings.PaperWidth / 25.4 * 100);
+                int heightInHundredthsOfInch = (int)(settings.PaperHeight / 25.4 * 100);
+                printDoc.DefaultPageSettings.PaperSize = new PaperSize("Custom", widthInHundredthsOfInch, heightInHundredthsOfInch);
+                
+                printDoc.PrintPage += (sender, e) =>
+                {
+                    if (e.Graphics != null)
+                    {
+                        using var img = System.Drawing.Image.FromFile(filePath);
+                        var destRect = new Rectangle(0, 0, e.PageBounds.Width, e.PageBounds.Height);
+                        e.Graphics.DrawImage(img, destRect);
+                    }
+                };
+                
+                printDoc.Print();
+                printDoc.Dispose();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"خطأ في الطباعة: {ex.Message}", "خطأ", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
