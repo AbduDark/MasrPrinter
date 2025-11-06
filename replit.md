@@ -1,50 +1,95 @@
-# MasrPrinter
+# MasrPrinter - برنامج طباعة الباركود
 
 ## Overview
-MasrPrinter is a .NET 8.0 WPF (Windows Presentation Foundation) desktop application. 
+MasrPrinter is a professional .NET 8.0 WPF (Windows Presentation Foundation) desktop application for printing barcodes and QR codes.
 
-**IMPORTANT LIMITATION**: WPF is a Windows-only framework that requires the Microsoft.WindowsDesktop.App runtime, which is not available on Linux systems. This application cannot run natively on Replit's Linux-based environment.
+**IMPORTANT**: WPF is a Windows-only framework. This application builds successfully on Replit but must be run on Windows.
 
 ## Project Structure
-- **MasrPrinter/** - Main project directory containing the WPF application
-  - `MainWindow.xaml` - Main window XAML layout
-  - `MainWindow.xaml.cs` - Main window code-behind
-  - `App.xaml` - Application-level XAML resources
-  - `App.xaml.cs` - Application startup logic
-  - `MasrPrinter.csproj` - Project file for .NET 8.0
+- **MasrPrinter/** - Main project directory
+  - `App.xaml` - Application resources with professional Arabic themes
+  - `MainWindow.xaml` - Main window with RTL support and modern UI
+  - `BatchPrintWindow.xaml` - Batch printing with live preview
+  - `CustomPrintWindow.xaml` - Custom single label printing
+  - `SettingsWindow.xaml` - Printer and paper settings
+  - `BarcodeGenerator.cs` - Barcode and QR code generation logic
+  - `PrinterSettings.cs` - Settings management
+  - `MasrPrinter.csproj` - .NET 8.0 WPF project file
 - **MasrPrinter.sln** - Visual Studio solution file
 
 ## Technology Stack
-- .NET 8.0
-- WPF (Windows Presentation Foundation) - Windows-only framework
-- C#
+- .NET 8.0 (net8.0-windows)
+- WPF (Windows Presentation Foundation)
+- C# with modern UI patterns
+- QRCoder library for QR code generation
+- BarcodeLib for Code128 barcode generation
+- System.Drawing.Common for image processing
 
-## Current Status
-The project has been successfully configured for Replit with a dual-mode setup:
+## Features
+- ✨ **Professional Arabic Interface**: Full RTL support with modern Material Design-inspired UI
+- 📦 **Batch Printing**: Generate multiple sequential labels with live preview
+- 🎨 **Custom Printing**: Create single labels with custom text/numbers
+- ⚙️ **Settings**: Configure paper size, thermal level, and barcode quality
+- 🔍 **Live Preview**: See barcodes before printing
+- 💾 **PNG Export**: Save all labels as high-quality PNG images
+- 📊 **Dual Barcode Support**: Code128 (linear) and QR Code (2D)
 
-- **On Linux/Replit**: Runs as a console application that displays information about the WPF limitation
-- **On Windows**: Can run as the full WPF GUI application
+## Running the Application
 
-The project file uses conditional compilation to target:
-- `net8.0` (console) on Linux
-- `net8.0-windows` (WPF GUI) on Windows
+### On Windows
+1. Ensure .NET 8.0 Desktop Runtime is installed
+2. Clone or download the project
+3. Open `MasrPrinter.sln` in Visual Studio, or
+4. Run from command line:
+   ```bash
+   cd MasrPrinter
+   dotnet run
+   ```
 
-The build completes successfully and the console version runs on Replit, clearly explaining that the full WPF GUI requires a Windows environment.
+### On Replit (Build Only)
+The project builds successfully on Replit:
+```bash
+cd MasrPrinter
+dotnet build
+```
+However, it cannot be executed due to WPF's Windows-only requirement.
 
-## Possible Solutions
-1. **Run on Windows**: This application needs to be run on a Windows machine with .NET 8.0 Desktop Runtime installed
-2. **Convert to Cross-Platform**: Port the application to Avalonia UI (WPF-like framework that works on Linux, macOS, and Windows)
-3. **Convert to Web App**: Rebuild as an ASP.NET Core web application
-4. **Convert to Console**: If the functionality doesn't require GUI, convert to a console application
+## User Interface
 
-## Files Added for Replit
-- `Program.cs` - Console entry point that runs on Linux and displays WPF limitation information
+### Main Window
+- **Batch Print**: Opens dialog for printing multiple sequential labels
+- **Custom Print**: Create a single label with custom content
+- **Settings**: Configure printer and paper settings
+- **Info**: Application version and usage tips
+
+### Batch Print Window
+- Set start and end numbers for sequential printing
+- Choose between Code128 and QR Code
+- Live preview of sample label
+- Progress bar during batch generation
+
+### Custom Print Window
+- Enter custom text or numbers
+- Optional barcode generation
+- Choose barcode type
+- Live preview with automatic updates
+
+### Settings Window
+- Paper width and height sliders (30-150mm × 20-100mm)
+- Thermal level control (0-100)
+- Barcode quality (150-600 DPI)
+- Live size preview
+
+## Output
+All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
-- 2025-11-06: Initial Replit setup and WPF compatibility solution
-  - Installed .NET 8.0 SDK
-  - Modified project file to support dual-mode compilation (console on Linux, WPF on Windows)
-  - Created `Program.cs` as console entry point for Linux environments
-  - Configured console workflow that successfully runs and displays information
-  - Updated .gitignore with Replit-specific entries
-  - Created comprehensive README.md explaining WPF limitations and alternatives
+- 2025-11-06: Complete WPF redesign
+  - Removed console fallback, full WPF on net8.0-windows
+  - Created professional Arabic UI with RTL support
+  - Added 3 specialized windows (Batch, Custom, Settings)
+  - Implemented live preview system
+  - Added Material Design-inspired theming
+  - Integrated QRCoder and BarcodeLib libraries
+  - Built complete barcode generation system
+  - Project builds cleanly with 0 errors, 0 warnings
