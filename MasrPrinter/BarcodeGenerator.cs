@@ -1,5 +1,8 @@
+using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.IO;
 using QRCoder;
 using BarcodeLib;
@@ -10,111 +13,251 @@ namespace MasrPrinter
     {
         public static System.Windows.Media.Imaging.BitmapImage GenerateBarcodeImage(string data, string type, int width = 400, int height = 100)
         {
-            Bitmap bitmap;
-            
-            if (type == "QR")
+            try
             {
-                bitmap = GenerateQRCode(data);
-            }
-            else
-            {
-                bitmap = GenerateBarcode(data, width, height);
-            }
+                if (string.IsNullOrWhiteSpace(data))
+                {
+                    throw new ArgumentException("البيانات لا يمكن أن تكون فارغة", nameof(data));
+                }
 
-            return ConvertBitmapToBitmapImage(bitmap);
+                Bitmap bitmap;
+                
+                if (type == "QR")
+                {
+                    bitmap = GenerateQRCode(data);
+                }
+                else
+                {
+                    bitmap = GenerateBarcode(data, width, height);
+                }
+
+                return ConvertBitmapToBitmapImage(bitmap);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"خطأ في إنشاء الباركود: {ex.Message}", ex);
+            }
         }
 
-        private static Bitmap GenerateQRCode(string data)
+        private static Bitmap GenerateQRCode(string data, int pixelsPerModule = 20)
         {
-            using var qrGenerator = new QRCodeGenerator();
-            using var qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
-            using var qrCode = new PngByteQRCode(qrCodeData);
-            byte[] qrBytes = qrCode.GetGraphic(20);
-            using var ms = new MemoryStream(qrBytes);
-            return new Bitmap(ms);
+            try
+            {
+                using var qrGenerator = new QRCodeGenerator();
+                using var qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+                using var qrCode = new PngByteQRCode(qrCodeData);
+                byte[] qrBytes = qrCode.GetGraphic(pixelsPerModule);
+                using var ms = new MemoryStream(qrBytes);
+                return new Bitmap(ms);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"خطأ في إنشاء QR Code: {ex.Message}", ex);
+            }
         }
 
         private static Bitmap GenerateBarcode(string data, int width, int height)
         {
-            var barcode = new Barcode();
-            var barcodeImage = barcode.Encode(BarcodeLib.TYPE.CODE128, data, Color.Black, Color.White, width, height);
-            return new Bitmap(barcodeImage);
+            try
+            {
+                var barcode = new Barcode
+                {
+                    IncludeLabel = false,
+                    Alignment = BarcodeLib.AlignmentPositions.CENTER
+                };
+                
+                var barcodeImage = barcode.Encode(BarcodeLib.TYPE.CODE128, data, Color.Black, Color.White, width, height);
+                return new Bitmap(barcodeImage);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"خطأ في إنشاء Code128: {ex.Message}", ex);
+            }
         }
 
         public static void SaveLabel(string number, string barcodeType, string outputPath)
         {
-            var settings = PrinterSettings.Instance;
-            var barcodeImage = GenerateBarcodeImageAsBitmap(number, barcodeType);
-
-            int width = settings.PaperWidth * 4;
-            int height = settings.PaperHeight * 4;
-
-            using var labelImage = new Bitmap(width, height);
-            using var graphics = Graphics.FromImage(labelImage);
-
-            graphics.Clear(Color.White);
-
-            var font = new Font("Arial", 24, FontStyle.Bold);
-            var textSize = graphics.MeasureString(number, font);
-            graphics.DrawString(number, font, Brushes.Black, (width - textSize.Width) / 2, 10);
-
-            int barcodeY = (int)textSize.Height + 20;
-            int barcodeWidth = width - 40;
-            int barcodeHeight = height - barcodeY - 20;
-
-            graphics.DrawImage(barcodeImage, 20, barcodeY, barcodeWidth, barcodeHeight);
-
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? "prints");
-            labelImage.Save(outputPath, ImageFormat.Png);
-        }
-
-        public static void SaveTextOnly(string number, string outputPath)
-        {
-            var settings = PrinterSettings.Instance;
-            int width = settings.PaperWidth * 4;
-            int height = settings.PaperHeight * 4;
-
-            using var labelImage = new Bitmap(width, height);
-            using var graphics = Graphics.FromImage(labelImage);
-
-            graphics.Clear(Color.White);
-
-            var font = new Font("Arial", 36, FontStyle.Bold);
-            var textSize = graphics.MeasureString(number, font);
-            graphics.DrawString(number, font, Brushes.Black,
-                (width - textSize.Width) / 2,
-                (height - textSize.Height) / 2);
-
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? "prints");
-            labelImage.Save(outputPath, ImageFormat.Png);
-        }
-
-        private static Bitmap GenerateBarcodeImageAsBitmap(string data, string type)
-        {
-            if (type == "QR")
+            try
             {
-                return GenerateQRCode(data);
+                if (string.IsNullOrWhiteSpace(number))
+                {
+                    throw new ArgumentException("الرقم لا يمكن أن يكون فارغاً", nameof(number));
+                }
+
+                var settings = PrinterSettings.Instance;
+                int dpi = (int)settings.BarcodeQuality;
+                
+                int width = (int)(settings.PaperWidth * dpi / 25.4);
+                int height = (int)(settings.PaperHeight * dpi / 25.4);
+
+                using var labelImage = new Bitmap(width, height);
+                labelImage.SetResolution(dpi, dpi);
+                
+                using var graphics = Graphics.FromImage(labelImage);
+                
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                
+                graphics.Clear(Color.White);
+
+                int fontSize = Math.Max(20, height / 15);
+                using var font = new Font("Arial", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+                var textSize = graphics.MeasureString(number, font);
+                
+                float textX = (width - textSize.Width) / 2;
+                float textY = height * 0.05f;
+                
+                graphics.DrawString(number, font, Brushes.Black, textX, textY);
+
+                int barcodeY = (int)(textY + textSize.Height + height * 0.05f);
+                int barcodeWidth = (int)(width * 0.9f);
+                int barcodeHeight = height - barcodeY - (int)(height * 0.05f);
+                int barcodeX = (width - barcodeWidth) / 2;
+
+                using var barcodeImage = GenerateBarcodeImageAsBitmap(number, barcodeType, barcodeWidth, barcodeHeight);
+                graphics.DrawImage(barcodeImage, barcodeX, barcodeY, barcodeWidth, barcodeHeight);
+
+                string? directory = Path.GetDirectoryName(outputPath);
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                
+                using var encoderParams = new EncoderParameters(1);
+                encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                var pngEncoder = GetEncoder(ImageFormat.Png);
+                
+                if (pngEncoder != null)
+                {
+                    labelImage.Save(outputPath, pngEncoder, encoderParams);
+                }
+                else
+                {
+                    labelImage.Save(outputPath, ImageFormat.Png);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return GenerateBarcode(data, 400, 100);
+                throw new Exception($"خطأ في حفظ الملصق: {ex.Message}", ex);
+            }
+        }
+
+        public static void SaveTextOnly(string text, string outputPath)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    throw new ArgumentException("النص لا يمكن أن يكون فارغاً", nameof(text));
+                }
+
+                var settings = PrinterSettings.Instance;
+                int dpi = (int)settings.BarcodeQuality;
+                
+                int width = (int)(settings.PaperWidth * dpi / 25.4);
+                int height = (int)(settings.PaperHeight * dpi / 25.4);
+
+                using var labelImage = new Bitmap(width, height);
+                labelImage.SetResolution(dpi, dpi);
+                
+                using var graphics = Graphics.FromImage(labelImage);
+                
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                
+                graphics.Clear(Color.White);
+
+                int fontSize = Math.Max(30, height / 8);
+                using var font = new Font("Arial", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+                var textSize = graphics.MeasureString(text, font);
+                
+                float textX = (width - textSize.Width) / 2;
+                float textY = (height - textSize.Height) / 2;
+                
+                graphics.DrawString(text, font, Brushes.Black, textX, textY);
+
+                string? directory = Path.GetDirectoryName(outputPath);
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                
+                using var encoderParams = new EncoderParameters(1);
+                encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                var pngEncoder = GetEncoder(ImageFormat.Png);
+                
+                if (pngEncoder != null)
+                {
+                    labelImage.Save(outputPath, pngEncoder, encoderParams);
+                }
+                else
+                {
+                    labelImage.Save(outputPath, ImageFormat.Png);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"خطأ في حفظ النص: {ex.Message}", ex);
+            }
+        }
+
+        private static Bitmap GenerateBarcodeImageAsBitmap(string data, string type, int width = 400, int height = 100)
+        {
+            try
+            {
+                if (type == "QR")
+                {
+                    int pixelsPerModule = Math.Max(10, Math.Min(width, height) / 30);
+                    return GenerateQRCode(data, pixelsPerModule);
+                }
+                else
+                {
+                    return GenerateBarcode(data, width, height);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"خطأ في إنشاء صورة الباركود: {ex.Message}", ex);
             }
         }
 
         private static System.Windows.Media.Imaging.BitmapImage ConvertBitmapToBitmapImage(Bitmap bitmap)
         {
-            using var memory = new MemoryStream();
-            bitmap.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
+            try
+            {
+                using var memory = new MemoryStream();
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
 
-            var bitmapImage = new System.Windows.Media.Imaging.BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = memory;
-            bitmapImage.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
-            bitmapImage.EndInit();
-            bitmapImage.Freeze();
+                var bitmapImage = new System.Windows.Media.Imaging.BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
 
-            return bitmapImage;
+                return bitmapImage;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"خطأ في تحويل الصورة: {ex.Message}", ex);
+            }
+        }
+
+        private static ImageCodecInfo? GetEncoder(ImageFormat format)
+        {
+            var codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (var codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
     }
 }
