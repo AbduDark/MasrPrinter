@@ -186,14 +186,15 @@ namespace MasrPrinter
             {
                 using var qrGenerator = new QRCodeGenerator();
                 using var qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
-                using var qrCode = new QRCode(qrCodeData);
+                using var qrCode = new QRCoder.QRCode(qrCodeData);
                 return qrCode.GetGraphic(20);
             }
             else
             {
                 var barcode = new Barcode();
-                return barcode.Encode(BarcodeLib.TYPE.CODE128, data,
+                var barcodeImage = barcode.Encode(BarcodeLib.TYPE.CODE128, data,
                     Color.Black, Color.White, 400, 100);
+                return new Bitmap(barcodeImage);
             }
         }
     }
