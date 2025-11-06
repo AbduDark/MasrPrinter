@@ -484,8 +484,11 @@ namespace MasrPrinter
                     if (e.Graphics != null)
                     {
                         using var img = System.Drawing.Image.FromFile(filePath);
-                        var destRect = new Rectangle(0, 0, e.PageBounds.Width, e.PageBounds.Height);
-                        e.Graphics.DrawImage(img, destRect);
+                        
+                        float paperWidthInPixels = widthInHundredthsOfInch / 100.0f * e.Graphics.DpiX;
+                        float paperHeightInPixels = heightInHundredthsOfInch / 100.0f * e.Graphics.DpiY;
+                        
+                        e.Graphics.DrawImage(img, 0, 0, paperWidthInPixels, paperHeightInPixels);
                     }
                 };
                 
