@@ -121,6 +121,48 @@
                                 <ComboBoxItem Content="QR Code (ثنائي الأبعاد)"/>
                             </ComboBox>
 
+                            <!-- حجم النص -->
+                            <TextBlock Text="حجم النص:"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource SecondaryTextColor}"
+                                       Margin="10,16,10,8"/>
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <Slider x:Name="TextSizeSlider" 
+                                        Minimum="10" 
+                                        Maximum="50" 
+                                        Value="20" 
+                                        Width="180"
+                                        VerticalAlignment="Center"
+                                        ValueChanged="TextSizeSlider_ValueChanged"/>
+                                <TextBlock Text="{Binding ElementName=TextSizeSlider, Path=Value, StringFormat={}{0:0}}" 
+                                          FontSize="14" 
+                                          FontWeight="Bold"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- حجم الباركود -->
+                            <TextBlock Text="حجم الباركود:"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource SecondaryTextColor}"
+                                       Margin="10,16,10,8"/>
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <Slider x:Name="BarcodeSizeSlider" 
+                                        Minimum="50" 
+                                        Maximum="200" 
+                                        Value="100" 
+                                        Width="180"
+                                        VerticalAlignment="Center"
+                                        ValueChanged="BarcodeSizeSlider_ValueChanged"/>
+                                <TextBlock Text="{Binding ElementName=BarcodeSizeSlider, Path=Value, StringFormat={}{0:0}%}" 
+                                          FontSize="14" 
+                                          FontWeight="Bold"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"/>
+                            </StackPanel>
+
                             <!-- زر المعاينة -->
                             <Button Content="🔄 معاينة"
                                     Style="{StaticResource ModernButton}"

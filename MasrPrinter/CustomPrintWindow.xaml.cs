@@ -38,7 +38,21 @@ namespace MasrPrinter
             bool isChecked = WithBarcodeCheckBox.IsChecked == true;
             BarcodeTypeComboBox.IsEnabled = isChecked;
             BarcodeTypeLabel.Opacity = isChecked ? 1.0 : 0.5;
+            if (BarcodeSizeSlider != null)
+                BarcodeSizeSlider.IsEnabled = isChecked;
 
+            UpdatePreview();
+        }
+
+        private void TextSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            PrinterSettings.Instance.TextSize = (int)e.NewValue;
+            UpdatePreview();
+        }
+
+        private void BarcodeSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            PrinterSettings.Instance.BarcodeSize = (int)e.NewValue;
             UpdatePreview();
         }
 
@@ -51,6 +65,9 @@ namespace MasrPrinter
         {
             try
             {
+                if (PreviewImage == null || PreviewPlaceholder == null)
+                    return;
+
                 if (string.IsNullOrWhiteSpace(CustomTextBox?.Text))
                 {
                     PreviewImage.Source = null;
@@ -75,9 +92,12 @@ namespace MasrPrinter
             }
             catch (Exception ex)
             {
-                PreviewImage.Source = null;
-                PreviewPlaceholder.Text = $"خطأ في المعاينة: {ex.Message}";
-                PreviewPlaceholder.Visibility = Visibility.Visible;
+                if (PreviewImage != null && PreviewPlaceholder != null)
+                {
+                    PreviewImage.Source = null;
+                    PreviewPlaceholder.Text = $"خطأ في المعاينة: {ex.Message}";
+                    PreviewPlaceholder.Visibility = Visibility.Visible;
+                }
             }
         }
 
@@ -96,7 +116,8 @@ namespace MasrPrinter
             g.Clear(System.Drawing.Color.White);
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-            using var font = new System.Drawing.Font("Tahoma", height / 6, System.Drawing.FontStyle.Bold, GraphicsUnit.Pixel);
+            int fontSize = settings.TextSize;
+            using var font = new System.Drawing.Font("Tahoma", fontSize, System.Drawing.FontStyle.Bold, GraphicsUnit.Point);
             var textSize = g.MeasureString(text, font);
             float textX = (width - textSize.Width) / 2;
             float textY = (height - textSize.Height) / 2;

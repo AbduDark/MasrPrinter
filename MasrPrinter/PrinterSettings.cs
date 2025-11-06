@@ -19,5 +19,7 @@ namespace MasrPrinter
         public int BarcodeQuality { get; set; } = 300;
         public string SelectedPrinter { get; set; } = "";
         public string CustomNumber { get; set; } = "1";
+        public int TextSize { get; set; } = 20;
+        public int BarcodeSize { get; set; } = 100;
     }
 }

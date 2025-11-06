@@ -21,6 +21,16 @@ namespace MasrPrinter
             currentBarcodeType = BarcodeTypeComboBox.SelectedIndex == 1 ? "QR" : "Code128";
         }
 
+        private void TextSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            PrinterSettings.Instance.TextSize = (int)e.NewValue;
+        }
+
+        private void BarcodeSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            PrinterSettings.Instance.BarcodeSize = (int)e.NewValue;
+        }
+
         private void PreviewButton_Click(object sender, RoutedEventArgs e)
         {
             try

@@ -94,8 +94,8 @@ namespace MasrPrinter
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                 graphics.Clear(Color.White);
 
-                int fontSize = Math.Max(20, height / 15);
-                using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+                int fontSize = settings.TextSize;
+                using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Point);
                 var textSize = graphics.MeasureString(number, font);
 
                 float textX = (width - textSize.Width) / 2;
@@ -103,8 +103,9 @@ namespace MasrPrinter
                 graphics.DrawString(number, font, Brushes.Black, textX, textY);
 
                 int barcodeY = (int)(textY + textSize.Height + height * 0.08f);
-                int barcodeWidth = (int)(width * 0.9f);
-                int barcodeHeight = height - barcodeY - (int)(height * 0.05f);
+                float sizeMultiplier = settings.BarcodeSize / 100f;
+                int barcodeWidth = (int)(width * 0.9f * sizeMultiplier);
+                int barcodeHeight = (int)((height - barcodeY - (int)(height * 0.05f)) * sizeMultiplier);
                 int barcodeX = (width - barcodeWidth) / 2;
 
                 using var barcodeImage = GenerateBarcodeImageAsBitmap(number, barcodeType, barcodeWidth, barcodeHeight);
@@ -153,8 +154,8 @@ namespace MasrPrinter
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                 graphics.Clear(Color.White);
 
-                int fontSize = Math.Max(30, height / 8);
-                using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+                int fontSize = settings.TextSize;
+                using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Point);
                 var textSize = graphics.MeasureString(text, font);
 
                 float textX = (width - textSize.Width) / 2;

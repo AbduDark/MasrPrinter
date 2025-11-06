@@ -82,12 +82,32 @@
                                       Unchecked="WithBarcodeCheckBox_Changed"/>
                         </Border>
 
+                        <TextBlock Text="حجم النص:" 
+                                  FontSize="14" 
+                                  FontWeight="SemiBold"
+                                  Foreground="{StaticResource SecondaryTextColor}"
+                                  Margin="10,16,10,8"/>
+                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                            <Slider x:Name="TextSizeSlider" 
+                                    Minimum="10" 
+                                    Maximum="50" 
+                                    Value="20" 
+                                    Width="200"
+                                    VerticalAlignment="Center"
+                                    ValueChanged="TextSizeSlider_ValueChanged"/>
+                            <TextBlock Text="{Binding ElementName=TextSizeSlider, Path=Value, StringFormat={}{0:0}}" 
+                                      FontSize="14" 
+                                      FontWeight="Bold"
+                                      Margin="10,0,0,0"
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+
                         <TextBlock x:Name="BarcodeTypeLabel"
                                   Text="نوع الباركود:" 
                                   FontSize="14" 
                                   FontWeight="SemiBold"
                                   Foreground="{StaticResource SecondaryTextColor}"
-                                  Margin="10,8,10,8"/>
+                                  Margin="10,16,10,8"/>
                         <ComboBox x:Name="BarcodeTypeComboBox" 
                                   Style="{StaticResource ModernComboBox}"
                                   SelectedIndex="0"
@@ -96,6 +116,26 @@
                             <ComboBoxItem Content="Code 128 (خطي)" FontSize="15"/>
                             <ComboBoxItem Content="QR Code (ثنائي الأبعاد)" FontSize="15"/>
                         </ComboBox>
+
+                        <TextBlock Text="حجم الباركود:" 
+                                  FontSize="14" 
+                                  FontWeight="SemiBold"
+                                  Foreground="{StaticResource SecondaryTextColor}"
+                                  Margin="10,16,10,8"/>
+                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                            <Slider x:Name="BarcodeSizeSlider" 
+                                    Minimum="50" 
+                                    Maximum="200" 
+                                    Value="100" 
+                                    Width="200"
+                                    VerticalAlignment="Center"
+                                    ValueChanged="BarcodeSizeSlider_ValueChanged"/>
+                            <TextBlock Text="{Binding ElementName=BarcodeSizeSlider, Path=Value, StringFormat={}{0:0}%}" 
+                                      FontSize="14" 
+                                      FontWeight="Bold"
+                                      Margin="10,0,0,0"
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
 
                         <Button Content="🔄 تحديث المعاينة" 
                                 Style="{StaticResource AccentButton}"
