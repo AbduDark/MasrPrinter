@@ -22,9 +22,9 @@ args = "MasrPrinter"
 name = "MasrPrinter"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd MasrPrinter && dotnet run"
-
-[workflows.workflow.metadata]
-outputType = "console"
