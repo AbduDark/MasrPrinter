@@ -16,20 +16,14 @@ namespace MasrPrinter
             try
             {
                 if (string.IsNullOrWhiteSpace(data))
-                {
                     throw new ArgumentException("البيانات لا يمكن أن تكون فارغة", nameof(data));
-                }
 
                 Bitmap bitmap;
-                
+
                 if (type == "QR")
-                {
                     bitmap = GenerateQRCode(data);
-                }
                 else
-                {
                     bitmap = GenerateBarcode(data, width, height);
-                }
 
                 return ConvertBitmapToBitmapImage(bitmap);
             }
@@ -65,7 +59,7 @@ namespace MasrPrinter
                     IncludeLabel = false,
                     Alignment = BarcodeLib.AlignmentPositions.CENTER
                 };
-                
+
                 var barcodeImage = barcode.Encode(BarcodeLib.TYPE.CODE128, data, Color.Black, Color.White, width, height);
                 return new Bitmap(barcodeImage);
             }
@@ -80,38 +74,35 @@ namespace MasrPrinter
             try
             {
                 if (string.IsNullOrWhiteSpace(number))
-                {
                     throw new ArgumentException("الرقم لا يمكن أن يكون فارغاً", nameof(number));
-                }
 
                 var settings = PrinterSettings.Instance;
                 int dpi = (int)settings.BarcodeQuality;
-                
+
                 int width = (int)(settings.PaperWidth * dpi / 25.4);
                 int height = (int)(settings.PaperHeight * dpi / 25.4);
+                width = Math.Max(width, 100);
+                height = Math.Max(height, 100);
 
                 using var labelImage = new Bitmap(width, height);
                 labelImage.SetResolution(dpi, dpi);
-                
+
                 using var graphics = Graphics.FromImage(labelImage);
-                
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                
                 graphics.Clear(Color.White);
 
                 int fontSize = Math.Max(20, height / 15);
-                using var font = new Font("Arial", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+                using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
                 var textSize = graphics.MeasureString(number, font);
-                
+
                 float textX = (width - textSize.Width) / 2;
                 float textY = height * 0.05f;
-                
                 graphics.DrawString(number, font, Brushes.Black, textX, textY);
 
-                int barcodeY = (int)(textY + textSize.Height + height * 0.05f);
+                int barcodeY = (int)(textY + textSize.Height + height * 0.08f);
                 int barcodeWidth = (int)(width * 0.9f);
                 int barcodeHeight = height - barcodeY - (int)(height * 0.05f);
                 int barcodeX = (width - barcodeWidth) / 2;
@@ -121,22 +112,16 @@ namespace MasrPrinter
 
                 string? directory = Path.GetDirectoryName(outputPath);
                 if (!string.IsNullOrEmpty(directory))
-                {
                     Directory.CreateDirectory(directory);
-                }
-                
+
                 using var encoderParams = new EncoderParameters(1);
                 encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
                 var pngEncoder = GetEncoder(ImageFormat.Png);
-                
+
                 if (pngEncoder != null)
-                {
                     labelImage.Save(outputPath, pngEncoder, encoderParams);
-                }
                 else
-                {
                     labelImage.Save(outputPath, ImageFormat.Png);
-                }
             }
             catch (Exception ex)
             {
@@ -149,54 +134,45 @@ namespace MasrPrinter
             try
             {
                 if (string.IsNullOrWhiteSpace(text))
-                {
                     throw new ArgumentException("النص لا يمكن أن يكون فارغاً", nameof(text));
-                }
 
                 var settings = PrinterSettings.Instance;
                 int dpi = (int)settings.BarcodeQuality;
-                
+
                 int width = (int)(settings.PaperWidth * dpi / 25.4);
                 int height = (int)(settings.PaperHeight * dpi / 25.4);
+                width = Math.Max(width, 100);
+                height = Math.Max(height, 100);
 
                 using var labelImage = new Bitmap(width, height);
                 labelImage.SetResolution(dpi, dpi);
-                
+
                 using var graphics = Graphics.FromImage(labelImage);
-                
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                
                 graphics.Clear(Color.White);
 
                 int fontSize = Math.Max(30, height / 8);
-                using var font = new Font("Arial", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+                using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
                 var textSize = graphics.MeasureString(text, font);
-                
+
                 float textX = (width - textSize.Width) / 2;
                 float textY = (height - textSize.Height) / 2;
-                
                 graphics.DrawString(text, font, Brushes.Black, textX, textY);
 
                 string? directory = Path.GetDirectoryName(outputPath);
                 if (!string.IsNullOrEmpty(directory))
-                {
                     Directory.CreateDirectory(directory);
-                }
-                
+
                 using var encoderParams = new EncoderParameters(1);
                 encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
                 var pngEncoder = GetEncoder(ImageFormat.Png);
-                
+
                 if (pngEncoder != null)
-                {
                     labelImage.Save(outputPath, pngEncoder, encoderParams);
-                }
                 else
-                {
                     labelImage.Save(outputPath, ImageFormat.Png);
-                }
             }
             catch (Exception ex)
             {
@@ -253,9 +229,7 @@ namespace MasrPrinter
             foreach (var codec in codecs)
             {
                 if (codec.FormatID == format.Guid)
-                {
                     return codec;
-                }
             }
             return null;
         }
