@@ -239,6 +239,233 @@
                     </StackPanel>
                 </Border>
 
+                <!-- مواصفات الباركود -->
+                <Border Style="{StaticResource CardPanel}" Margin="0,0,0,16">
+                    <StackPanel>
+                        <Border Background="{StaticResource PrimaryGradient}"
+                                CornerRadius="14"
+                                Padding="16,10"
+                                Margin="0,0,0,20">
+                            <TextBlock Text="📏 مواصفات الباركود"
+                                      FontSize="20"
+                                      FontWeight="Bold"
+                                      Foreground="White"/>
+                        </Border>
+
+                        <!-- خيار 2x1 -->
+                        <CheckBox x:Name="Enable2x1CheckBox"
+                                  Content="تفعيل وضع 2x1 (رقم فوق + باركود تحت)"
+                                  FontSize="16"
+                                  FontWeight="SemiBold"
+                                  Foreground="{StaticResource TextColor}"
+                                  Margin="10,8,10,16"
+                                  VerticalContentAlignment="Center"/>
+
+                        <!-- مواقع الباركود -->
+                        <Grid Margin="10,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="X (الموضع الأفقي):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="BarcodePositionXTextBox"
+                                        Text="31"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Y (الموضع العمودي):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="BarcodePositionYTextBox"
+                                        Text="7"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- أحجام النصوص -->
+                        <Grid Margin="10,16,10,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Number Size (حجم الرقم):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="NumberFontSizeTextBox"
+                                        Text="47"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="# Size (حجم الهاشتاج):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="HashtagFontSizeTextBox"
+                                        Text="35"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- مقاسات الباركود -->
+                        <Grid Margin="10,16,10,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="ارتفاع الباركود X (مم):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="BarcodeHeightTextBox"
+                                        Text="2"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="عرض الباركود Y (مم):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="BarcodeWidthTextBox"
+                                        Text="4"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- عرض خطوط الباركود -->
+                        <Grid Margin="10,16,10,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Narrow Bar Width (عرض ضيق):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="NarrowBarWidthTextBox"
+                                        Text="2"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Wide Bar Width (عرض عريض):"
+                                          FontSize="14"
+                                          FontWeight="SemiBold"
+                                          Foreground="{StaticResource SecondaryTextColor}"
+                                          Margin="0,0,0,8"/>
+                                <TextBox x:Name="WideBarWidthTextBox"
+                                        Text="4"
+                                        FontSize="16"
+                                        Padding="8,4"
+                                        MinHeight="36"
+                                        Background="White"
+                                        Foreground="#222"
+                                        BorderBrush="#DDD"
+                                        BorderThickness="1"
+                                        VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Background="#FEF3C7"
+                                CornerRadius="12"
+                                Padding="16"
+                                Margin="10,16,10,0"
+                                BorderBrush="{StaticResource WarningColor}"
+                                BorderThickness="1">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="💡" FontSize="18" Margin="0,0,10,0"/>
+                                    <TextBlock Text="هذه الإعدادات تستخدم لتخصيص شكل ومقاس الباركود بدقة عالية"
+                                               Foreground="{StaticResource WarningColor}"
+                                               FontWeight="Bold"
+                                               FontSize="13"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <TextBlock Text="ملاحظة: مكتبة الباركود تستخدم Narrow Bar Width لتحديد عرض الخطوط الضيقة، وتحسب Wide Bar Width تلقائياً حسب معيار الباركود (Code128 يستخدم نسبة محددة)"
+                                           Foreground="{StaticResource WarningColor}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap"
+                                           Margin="28,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
                 <!-- معاينة الحجم -->
                 <Border x:Name="PreviewSizeBox"
                         Style="{StaticResource CardPanel}"

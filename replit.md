@@ -79,17 +79,34 @@ However, it cannot be executed due to WPF's Windows-only requirement.
 - Live preview with automatic updates
 
 ### Settings Window
-- Paper width and height sliders (30-150mm × 20-100mm)
+- Paper width and height settings (30-150mm × 20-100mm)
 - **Printer selection** from installed system printers
 - Thermal level control (0-100)
 - Barcode quality (150-600 DPI)
 - **Custom default number** for printing
+- **2x1 Mode**: Enable printing number above and barcode below on the same sheet
+- **Barcode Positioning**: X/Y position control in millimeters
+- **Font Sizes**: Separate sizes for Number and Hashtag (#)
+- **Barcode Dimensions**: Custom height and width in millimeters
+- **Bar Width Control**: Narrow bar width customization (Wide bar calculated automatically)
 - Live size preview
 
 ## Output
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-06: **Advanced Barcode Customization & 2x1 Layout Mode**
+  - **NEW FEATURE**: 2x1 printing mode that places number on top and barcode below
+  - Added precise barcode positioning control (X/Y coordinates in mm)
+  - Customizable font sizes for numbers and hashtag symbols
+  - Custom barcode dimensions (height/width in millimeters)
+  - Narrow bar width control using BarcodeLib.BarWidth property
+  - Wide bar width field preserved (calculated automatically by library per Code128 standard)
+  - Enhanced Settings UI with all new controls in a dedicated "Barcode Specifications" section
+  - Full validation for all new numeric inputs
+  - Informative tooltips explaining library behavior for bar width ratios
+  - Clean build with 0 errors, 0 warnings
+  
 - 2025-11-06: **Modern UI Redesign with Gradient Theme**
   - **COMPLETE UI OVERHAUL**: Redesigned all 4 windows with modern gradient-based color system
   - New purple/pink gradient theme (#6A1B9A, #8E24AA, #E91E63) instead of blue/orange

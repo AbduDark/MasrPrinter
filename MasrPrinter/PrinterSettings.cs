@@ -21,5 +21,15 @@ namespace MasrPrinter
         public string CustomNumber { get; set; } = "1";
         public int TextSize { get; set; } = 20;
         public int BarcodeSize { get; set; } = 100;
+        
+        public bool Enable2x1Mode { get; set; } = false;
+        public int BarcodePositionX { get; set; } = 31;
+        public int BarcodePositionY { get; set; } = 7;
+        public int NumberFontSize { get; set; } = 47;
+        public int HashtagFontSize { get; set; } = 35;
+        public int BarcodeHeightMM { get; set; } = 2;
+        public int BarcodeWidthMM { get; set; } = 4;
+        public int NarrowBarWidth { get; set; } = 2;
+        public int WideBarWidth { get; set; } = 4;
     }
 }
