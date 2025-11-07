@@ -21,8 +21,8 @@ namespace MasrPrinter
             }
         }
 
-        public int PaperWidth { get; set; } = 80;
-        public int PaperHeight { get; set; } = 50;
+        public int PaperWidth { get; set; } = 30;
+        public int PaperHeight { get; set; } = 20;
         public int BarcodeQuality { get; set; } = 203;
         public string SelectedPrinter { get; set; } = "";
         public string SelectedPaperSizeName { get; set; } = "";

@@ -100,6 +100,17 @@ The unified interface contains:
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-07: **Custom Label Layout with Hashtag Symbol**
+  - **LAYOUT REDESIGN**: Label now matches physical printer output exactly
+  - Number appears on the **LEFT** (e.g., "1-", "2-")
+  - Hashtag symbol "#" appears on the **RIGHT** 
+  - Barcode centered below the number
+  - Default paper size updated to **30x20mm** (small sticker size)
+  - Optimized margins and spacing for small labels
+  - Font changed to Arial for better readability on small labels
+  - Clean build: 0 Errors, 0 Warnings
+  - **Result**: Labels now match the exact format of physical thermal printer output!
+
 - 2025-11-07: **Major Simplification - Auto-Calculate Everything**
   - **SIMPLIFIED UI**: Removed all unnecessary settings controls
   - **ESSENTIAL SETTINGS ONLY**: Printer, Paper Size, DPI (203-300)
