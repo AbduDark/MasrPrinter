@@ -107,13 +107,57 @@
                                 </Grid>
 
                                 <TextBlock Text="جودة الباركود (DPI):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <Grid Margin="0,0,0,0">
+                                <Grid Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Slider x:Name="BarcodeQualitySlider" Minimum="150" Maximum="300" Value="203" TickFrequency="50" Grid.Column="0" Height="30"/>
                                     <TextBlock Text="{Binding ElementName=BarcodeQualitySlider, Path=Value, StringFormat={}{0:0}}" 
+                                              FontWeight="Bold" FontSize="15" Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <TextBlock Text="حجم رقم الملصق (%):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider x:Name="NumberFontSizeSlider" Minimum="50" Maximum="200" Value="100" TickFrequency="10" Grid.Column="0" Height="30" ValueChanged="SizeSettings_Changed"/>
+                                    <TextBlock Text="{Binding ElementName=NumberFontSizeSlider, Path=Value, StringFormat={}{0:0}%}" 
+                                              FontWeight="Bold" FontSize="15" Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <TextBlock Text="حجم علامة # (%):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider x:Name="HashtagFontSizeSlider" Minimum="50" Maximum="200" Value="90" TickFrequency="10" Grid.Column="0" Height="30" ValueChanged="SizeSettings_Changed"/>
+                                    <TextBlock Text="{Binding ElementName=HashtagFontSizeSlider, Path=Value, StringFormat={}{0:0}%}" 
+                                              FontWeight="Bold" FontSize="15" Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <TextBlock Text="عرض الباركود (%):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider x:Name="BarcodeWidthSlider" Minimum="50" Maximum="100" Value="90" TickFrequency="5" Grid.Column="0" Height="30" ValueChanged="SizeSettings_Changed"/>
+                                    <TextBlock Text="{Binding ElementName=BarcodeWidthSlider, Path=Value, StringFormat={}{0:0}%}" 
+                                              FontWeight="Bold" FontSize="15" Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <TextBlock Text="ارتفاع الباركود (%):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Slider x:Name="BarcodeHeightSlider" Minimum="30" Maximum="80" Value="50" TickFrequency="5" Grid.Column="0" Height="30" ValueChanged="SizeSettings_Changed"/>
+                                    <TextBlock Text="{Binding ElementName=BarcodeHeightSlider, Path=Value, StringFormat={}{0:0}%}" 
                                               FontWeight="Bold" FontSize="15" Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
                                 </Grid>
                             </StackPanel>

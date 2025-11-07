@@ -100,6 +100,17 @@ The unified interface contains:
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-07: **Added Custom Size Controls**
+  - **NEW FEATURE**: Complete control over label element sizes
+  - Added slider for **Number size** (50-200%, default 100%)
+  - Added slider for **Hashtag (#) size** (50-200%, default 90%)
+  - Added slider for **Barcode width** (50-100%, default 90%)
+  - Added slider for **Barcode height** (30-80%, default 50%)
+  - All settings saved and restored automatically
+  - Live preview updates as you adjust sliders
+  - Clean build: 0 Errors, 0 Warnings
+  - **Result**: Full customization of label appearance!
+
 - 2025-11-07: **Improved Barcode Visibility on Small Labels**
   - **ENHANCEMENT**: Increased barcode size to 90% of label width for better visibility
   - Optimized space allocation between number and barcode

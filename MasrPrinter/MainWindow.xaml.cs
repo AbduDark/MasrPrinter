@@ -151,6 +151,11 @@ namespace MasrPrinter
             PaperHeightTextBox.Text = settings.PaperHeight.ToString();
             BarcodeQualitySlider.Value = settings.BarcodeQuality;
             
+            NumberFontSizeSlider.Value = settings.NumberFontSize;
+            HashtagFontSizeSlider.Value = settings.HashtagFontSize;
+            BarcodeWidthSlider.Value = settings.BarcodeWidthPercent;
+            BarcodeHeightSlider.Value = settings.BarcodeHeightPercent;
+            
             CustomTextBox.Text = settings.CustomNumber;
             
             if (!string.IsNullOrEmpty(settings.SelectedPrinter) && PrinterComboBox.Items.Contains(settings.SelectedPrinter))
@@ -162,6 +167,11 @@ namespace MasrPrinter
             {
                 PrinterComboBox.SelectedIndex = 0;
             }
+        }
+
+        private void SizeSettings_Changed(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            UpdatePreview();
         }
 
         private void PrintMode_Changed(object sender, RoutedEventArgs e)
@@ -328,6 +338,11 @@ namespace MasrPrinter
                 }
 
                 settings.BarcodeQuality = (int)BarcodeQualitySlider.Value;
+                
+                settings.NumberFontSize = (int)NumberFontSizeSlider.Value;
+                settings.HashtagFontSize = (int)HashtagFontSizeSlider.Value;
+                settings.BarcodeWidthPercent = (int)BarcodeWidthSlider.Value;
+                settings.BarcodeHeightPercent = (int)BarcodeHeightSlider.Value;
 
                 if (PrinterComboBox.SelectedItem != null)
                 {

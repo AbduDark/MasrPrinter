@@ -27,6 +27,11 @@ namespace MasrPrinter
         public string SelectedPrinter { get; set; } = "";
         public string SelectedPaperSizeName { get; set; } = "";
         public string CustomNumber { get; set; } = "1";
+        
+        public int NumberFontSize { get; set; } = 100;
+        public int HashtagFontSize { get; set; } = 90;
+        public int BarcodeWidthPercent { get; set; } = 90;
+        public int BarcodeHeightPercent { get; set; } = 50;
 
         public void SaveToFile()
         {
