@@ -100,6 +100,14 @@ The unified interface contains:
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-07: **Fixed Barcode Generation for Small Labels**
+  - **BUG FIX**: Resolved "Parameter is not valid" error for small paper sizes
+  - Added minimum size validation for barcode dimensions (100x40 pixels for Code128, 50x50 for QR)
+  - Prevents invalid/negative dimensions that caused crashes
+  - Ensures barcodes always render correctly regardless of paper size
+  - Clean build: 0 Errors, 0 Warnings
+  - **Result**: Small labels (30x20mm) now generate successfully!
+
 - 2025-11-07: **Custom Label Layout with Hashtag Symbol**
   - **LAYOUT REDESIGN**: Label now matches physical printer output exactly
   - Number appears on the **LEFT** (e.g., "1-", "2-")

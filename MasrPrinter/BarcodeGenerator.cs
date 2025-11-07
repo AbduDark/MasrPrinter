@@ -120,12 +120,16 @@ namespace MasrPrinter
                 if (barcodeType == "QR")
                 {
                     int availableSpace = Math.Min((int)(width * 0.85f), height - barcodeY - (int)(height * 0.05f));
+                    availableSpace = Math.Max(availableSpace, 50);
                     barcodeWidth = barcodeHeight = availableSpace;
                 }
                 else
                 {
                     barcodeWidth = (int)(width * 0.85f);
+                    barcodeWidth = Math.Max(barcodeWidth, 100);
+                    
                     barcodeHeight = Math.Min((int)(height * 0.5f), height - barcodeY - (int)(height * 0.05f));
+                    barcodeHeight = Math.Max(barcodeHeight, 40);
                 }
                 
                 int barcodeX = (width - barcodeWidth) / 2;
