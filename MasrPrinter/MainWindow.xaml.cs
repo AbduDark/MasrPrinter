@@ -508,6 +508,9 @@ namespace MasrPrinter
                         
                         e.Graphics.DrawImage(img, 0, 0, paperWidthInPixels, paperHeightInPixels);
                     }
+                    
+                    // إيقاف الطباعة بعد الصفحة الأولى فقط
+                    e.HasMorePages = false;
                 };
                 
                 printDoc.Print();
