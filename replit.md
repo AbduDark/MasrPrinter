@@ -100,6 +100,16 @@ The unified interface contains:
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-07: **Auto Paper Size Detection & Persistent Settings**
+  - **NEW FEATURE**: Automatic detection of paper sizes from selected printer (XPRINTER XP-370B compatible)
+  - Added PaperSizeComboBox to select from available paper sizes automatically
+  - "مقاس مخصص" (Custom Size) option for manual input
+  - Persistent settings storage using JSON file (printer_settings.json)
+  - All settings automatically saved and restored on app restart
+  - Fixed printing issue: pages now print correctly with full content (number + barcode)
+  - Improved DPI calculation for proper print scaling
+  - Clean build: 0 Errors, 0 Warnings
+  
 - 2025-11-06: **COMPLETE UI REDESIGN - Single Page Simplicity**
   - **REVOLUTIONARY CHANGE**: Consolidated all 4 windows into ONE simple, lightweight page
   - Removed separate windows: SettingsWindow, BatchPrintWindow, CustomPrintWindow

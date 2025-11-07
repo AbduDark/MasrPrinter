@@ -47,6 +47,103 @@ namespace MasrPrinter
             }
         }
 
+        private void PrinterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PrinterComboBox.SelectedItem == null) return;
+            LoadPaperSizes();
+        }
+
+        private void LoadPaperSizes()
+        {
+            try
+            {
+                PaperSizeComboBox.Items.Clear();
+                
+                if (PrinterComboBox.SelectedItem == null) return;
+                
+                string selectedPrinter = PrinterComboBox.SelectedItem.ToString() ?? "";
+                if (string.IsNullOrEmpty(selectedPrinter)) return;
+
+                var printerSettings = new System.Drawing.Printing.PrinterSettings
+                {
+                    PrinterName = selectedPrinter
+                };
+
+                PaperSizeComboBox.Items.Add("مقاس مخصص");
+                
+                foreach (PaperSize paperSize in printerSettings.PaperSizes)
+                {
+                    if (paperSize.Width > 0 && paperSize.Height > 0)
+                    {
+                        PaperSizeComboBox.Items.Add(paperSize.PaperName);
+                    }
+                }
+
+                var settings = PrinterSettings.Instance;
+                if (!string.IsNullOrEmpty(settings.SelectedPaperSizeName) && 
+                    PaperSizeComboBox.Items.Contains(settings.SelectedPaperSizeName))
+                {
+                    PaperSizeComboBox.SelectedItem = settings.SelectedPaperSizeName;
+                }
+                else
+                {
+                    PaperSizeComboBox.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في تحميل مقاسات الورق: {ex.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                PaperSizeComboBox.Items.Clear();
+                PaperSizeComboBox.Items.Add("مقاس مخصص");
+                PaperSizeComboBox.SelectedIndex = 0;
+            }
+        }
+
+        private void PaperSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PaperSizeComboBox.SelectedItem == null || PrinterComboBox.SelectedItem == null) return;
+
+            string selectedSize = PaperSizeComboBox.SelectedItem.ToString() ?? "";
+            
+            if (selectedSize == "مقاس مخصص")
+            {
+                PaperWidthTextBox.IsEnabled = true;
+                PaperHeightTextBox.IsEnabled = true;
+                return;
+            }
+
+            try
+            {
+                string selectedPrinter = PrinterComboBox.SelectedItem.ToString() ?? "";
+                var printerSettings = new System.Drawing.Printing.PrinterSettings
+                {
+                    PrinterName = selectedPrinter
+                };
+
+                foreach (PaperSize paperSize in printerSettings.PaperSizes)
+                {
+                    if (paperSize.PaperName == selectedSize)
+                    {
+                        int widthMM = (int)(paperSize.Width / 100.0 * 25.4);
+                        int heightMM = (int)(paperSize.Height / 100.0 * 25.4);
+                        
+                        PaperWidthTextBox.Text = widthMM.ToString();
+                        PaperHeightTextBox.Text = heightMM.ToString();
+                        
+                        PaperWidthTextBox.IsEnabled = false;
+                        PaperHeightTextBox.IsEnabled = false;
+                        
+                        UpdatePreview();
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في تحديث المقاسات: {ex.Message}", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         private void LoadSettings()
         {
             var settings = PrinterSettings.Instance;
@@ -72,6 +169,7 @@ namespace MasrPrinter
             if (!string.IsNullOrEmpty(settings.SelectedPrinter) && PrinterComboBox.Items.Contains(settings.SelectedPrinter))
             {
                 PrinterComboBox.SelectedItem = settings.SelectedPrinter;
+                LoadPaperSizes();
             }
             else if (PrinterComboBox.Items.Count > 0)
             {
@@ -282,7 +380,14 @@ namespace MasrPrinter
                     settings.SelectedPrinter = PrinterComboBox.SelectedItem.ToString() ?? "";
                 }
 
+                if (PaperSizeComboBox.SelectedItem != null)
+                {
+                    settings.SelectedPaperSizeName = PaperSizeComboBox.SelectedItem.ToString() ?? "";
+                }
+
                 settings.CustomNumber = CustomTextBox.Text;
+
+                settings.SaveToFile();
 
                 MessageBox.Show("تم حفظ الإعدادات بنجاح!", "نجاح", MessageBoxButton.OK, MessageBoxImage.Information);
             }

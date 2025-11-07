@@ -84,7 +84,10 @@
                             <!-- Column 1 -->
                             <StackPanel Grid.Column="0" Margin="0,0,20,0">
                                 <TextBlock Text="الطابعة:" FontWeight="Bold" FontSize="13" Margin="0,0,0,5"/>
-                                <ComboBox x:Name="PrinterComboBox" Height="35" FontSize="14" Margin="0,0,0,12"/>
+                                <ComboBox x:Name="PrinterComboBox" Height="35" FontSize="14" Margin="0,0,0,12" SelectionChanged="PrinterComboBox_SelectionChanged"/>
+
+                                <TextBlock Text="مقاس الورق:" FontWeight="Bold" FontSize="13" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="PaperSizeComboBox" Height="35" FontSize="14" Margin="0,0,0,12" SelectionChanged="PaperSizeComboBox_SelectionChanged"/>
 
                                 <TextBlock Text="عرض الورق (مم):" FontWeight="Bold" FontSize="13" Margin="0,0,0,5"/>
                                 <TextBox x:Name="PaperWidthTextBox" Height="35" FontSize="14" Margin="0,0,0,12" TextChanged="PaperSize_TextChanged"/>
