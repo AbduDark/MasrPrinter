@@ -81,77 +81,41 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Column 1 -->
-                            <StackPanel Grid.Column="0" Margin="0,0,20,0">
-                                <TextBlock Text="الطابعة:" FontWeight="Bold" FontSize="13" Margin="0,0,0,5"/>
-                                <ComboBox x:Name="PrinterComboBox" Height="35" FontSize="14" Margin="0,0,0,12" SelectionChanged="PrinterComboBox_SelectionChanged"/>
+                            <!-- Simplified Settings -->
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+                                <TextBlock Text="الطابعة:" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                <ComboBox x:Name="PrinterComboBox" Height="40" FontSize="15" Margin="0,0,0,20" SelectionChanged="PrinterComboBox_SelectionChanged"/>
 
-                                <TextBlock Text="مقاس الورق:" FontWeight="Bold" FontSize="13" Margin="0,0,0,5"/>
-                                <ComboBox x:Name="PaperSizeComboBox" Height="35" FontSize="14" Margin="0,0,0,12" SelectionChanged="PaperSizeComboBox_SelectionChanged"/>
+                                <TextBlock Text="مقاس الورق:" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                <ComboBox x:Name="PaperSizeComboBox" Height="40" FontSize="15" Margin="0,0,0,20" SelectionChanged="PaperSizeComboBox_SelectionChanged"/>
 
-                                <TextBlock Text="عرض الورق (مم):" FontWeight="Bold" FontSize="13" Margin="0,0,0,5"/>
-                                <TextBox x:Name="PaperWidthTextBox" Height="35" FontSize="14" Margin="0,0,0,12" TextChanged="PaperSize_TextChanged"/>
+                                <Grid Margin="0,0,0,20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="ارتفاع الورق (مم):" FontWeight="Bold" FontSize="13" Margin="0,0,0,5"/>
-                                <TextBox x:Name="PaperHeightTextBox" Height="35" FontSize="14" Margin="0,0,0,12" TextChanged="PaperSize_TextChanged"/>
+                                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                        <TextBlock Text="عرض الورق (مم):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                        <TextBox x:Name="PaperWidthTextBox" Height="40" FontSize="15" TextChanged="PaperSize_TextChanged"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                        <TextBlock Text="ارتفاع الورق (مم):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+                                        <TextBox x:Name="PaperHeightTextBox" Height="40" FontSize="15" TextChanged="PaperSize_TextChanged"/>
+                                    </StackPanel>
+                                </Grid>
 
                                 <TextBlock Text="جودة الباركود (DPI):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <Grid Margin="0,0,0,20">
+                                <Grid Margin="0,0,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Slider x:Name="BarcodeQualitySlider" Minimum="150" Maximum="600" Value="300" TickFrequency="50" Grid.Column="0" Height="30"/>
+                                    <Slider x:Name="BarcodeQualitySlider" Minimum="150" Maximum="300" Value="203" TickFrequency="50" Grid.Column="0" Height="30"/>
                                     <TextBlock Text="{Binding ElementName=BarcodeQualitySlider, Path=Value, StringFormat={}{0:0}}" 
                                               FontWeight="Bold" FontSize="15" Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
                                 </Grid>
-
-                                <CheckBox x:Name="Enable2x1CheckBox" Content="تفعيل وضع 2x1 (رقم فوق + باركود تحت)" 
-                                         FontWeight="Bold" FontSize="14" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="مستوى الطباعة الحرارية:" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <Grid Margin="0,0,0,20">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Slider x:Name="ThermalLevelSlider" Minimum="0" Maximum="100" Value="50" TickFrequency="10" Grid.Column="0" Height="30"/>
-                                    <TextBlock Text="{Binding ElementName=ThermalLevelSlider, Path=Value, StringFormat={}{0:0}}" 
-                                              FontWeight="Bold" FontSize="15" Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                                </Grid>
-
-                                <TextBlock Text="حجم النص:" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="TextSizeTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="حجم الباركود:" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="BarcodeSizeTextBox" Height="40" FontSize="15" Margin="0,0,0,0"/>
-                            </StackPanel>
-
-                            <!-- Column 2 -->
-                            <StackPanel Grid.Column="1" Margin="20,0,0,0">
-                                <TextBlock Text="موضع الباركود X (مم):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="BarcodePositionXTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="موضع الباركود Y (مم):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="BarcodePositionYTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="ارتفاع الباركود (مم):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="BarcodeHeightTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="عرض الباركود (مم):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="BarcodeWidthTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="حجم خط الرقم:" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="NumberFontSizeTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="حجم خط #:" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="HashtagFontSizeTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="عرض الخط الضيق (Narrow):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="NarrowBarWidthTextBox" Height="40" FontSize="15" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="عرض الخط العريض (Wide):" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
-                                <TextBox x:Name="WideBarWidthTextBox" Height="40" FontSize="15" Margin="0,0,0,0"/>
                             </StackPanel>
                         </Grid>
                     </Border>

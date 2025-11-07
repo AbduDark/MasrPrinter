@@ -54,12 +54,10 @@ namespace MasrPrinter
         {
             try
             {
-                var settings = PrinterSettings.Instance;
                 var barcode = new Barcode
                 {
                     IncludeLabel = false,
-                    Alignment = BarcodeLib.AlignmentPositions.CENTER,
-                    BarWidth = settings.NarrowBarWidth
+                    Alignment = BarcodeLib.AlignmentPositions.CENTER
                 };
 
                 var barcodeImage = barcode.Encode(BarcodeLib.TYPE.CODE128, data, Color.Black, Color.White, width, height);
@@ -96,51 +94,35 @@ namespace MasrPrinter
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                 graphics.Clear(Color.White);
 
-                if (settings.Enable2x1Mode)
+                int topMargin = (int)(height * 0.05f);
+                int numberFontSize = (int)(Math.Min(width, height * 0.25f) / 3.5f);
+                
+                using var numberFont = new Font("Tahoma", numberFontSize, FontStyle.Bold, GraphicsUnit.Point);
+                var numberSize = graphics.MeasureString(number, numberFont);
+                
+                float numberX = (width - numberSize.Width) / 2;
+                float numberY = topMargin;
+                graphics.DrawString(number, numberFont, Brushes.Black, numberX, numberY);
+
+                int barcodeGap = (int)(height * 0.05f);
+                int barcodeY = (int)(numberY + numberSize.Height + barcodeGap);
+                
+                int barcodeWidth, barcodeHeight;
+                if (barcodeType == "QR")
                 {
-                    int numberFontSize = settings.NumberFontSize;
-                    using var numberFont = new Font("Tahoma", numberFontSize, FontStyle.Bold, GraphicsUnit.Point);
-                    var numberSize = graphics.MeasureString(number, numberFont);
-                    
-                    float numberX = settings.BarcodePositionX * dpi / 25.4f;
-                    float numberY = settings.BarcodePositionY * dpi / 25.4f;
-                    graphics.DrawString(number, numberFont, Brushes.Black, numberX, numberY);
-
-                    int hashtagFontSize = settings.HashtagFontSize;
-                    using var hashtagFont = new Font("Tahoma", hashtagFontSize, FontStyle.Bold, GraphicsUnit.Point);
-                    var hashtagSize = graphics.MeasureString("#", hashtagFont);
-                    
-                    float hashtagX = numberX + numberSize.Width + 10;
-                    float hashtagY = numberY;
-                    graphics.DrawString("#", hashtagFont, Brushes.Black, hashtagX, hashtagY);
-
-                    int barcodeWidthPixels = (int)(settings.BarcodeWidthMM * dpi / 25.4);
-                    int barcodeHeightPixels = (int)(settings.BarcodeHeightMM * dpi / 25.4);
-                    float barcodeX = numberX;
-                    float barcodeY = numberY + numberSize.Height + 10;
-
-                    using var barcodeImage = GenerateBarcodeImageAsBitmap(number, barcodeType, barcodeWidthPixels, barcodeHeightPixels);
-                    graphics.DrawImage(barcodeImage, barcodeX, barcodeY, barcodeWidthPixels, barcodeHeightPixels);
+                    int availableSpace = Math.Min((int)(width * 0.9f), height - barcodeY - (int)(height * 0.05f));
+                    barcodeWidth = barcodeHeight = availableSpace;
                 }
                 else
                 {
-                    int fontSize = settings.TextSize;
-                    using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Point);
-                    var textSize = graphics.MeasureString(number, font);
-
-                    float textX = (width - textSize.Width) / 2;
-                    float textY = height * 0.05f;
-                    graphics.DrawString(number, font, Brushes.Black, textX, textY);
-
-                    int barcodeY = (int)(textY + textSize.Height + height * 0.08f);
-                    float sizeMultiplier = settings.BarcodeSize / 100f;
-                    int barcodeWidth = (int)(width * 0.9f * sizeMultiplier);
-                    int barcodeHeight = (int)((height - barcodeY - (int)(height * 0.05f)) * sizeMultiplier);
-                    int barcodeX = (width - barcodeWidth) / 2;
-
-                    using var barcodeImage = GenerateBarcodeImageAsBitmap(number, barcodeType, barcodeWidth, barcodeHeight);
-                    graphics.DrawImage(barcodeImage, barcodeX, barcodeY, barcodeWidth, barcodeHeight);
+                    barcodeWidth = (int)(width * 0.9f);
+                    barcodeHeight = (int)(height * 0.45f);
                 }
+                
+                int barcodeX = (width - barcodeWidth) / 2;
+
+                using var barcodeImage = GenerateBarcodeImageAsBitmap(number, barcodeType, barcodeWidth, barcodeHeight);
+                graphics.DrawImage(barcodeImage, barcodeX, barcodeY, barcodeWidth, barcodeHeight);
 
                 string? directory = Path.GetDirectoryName(outputPath);
                 if (!string.IsNullOrEmpty(directory))
@@ -185,7 +167,7 @@ namespace MasrPrinter
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                 graphics.Clear(Color.White);
 
-                int fontSize = settings.TextSize;
+                int fontSize = (int)(Math.Min(width, height * 0.25f) / 3.5f);
                 using var font = new Font("Tahoma", fontSize, FontStyle.Bold, GraphicsUnit.Point);
                 var textSize = graphics.MeasureString(text, font);
 

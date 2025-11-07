@@ -100,6 +100,16 @@ The unified interface contains:
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-07: **Major Simplification - Auto-Calculate Everything**
+  - **SIMPLIFIED UI**: Removed all unnecessary settings controls
+  - **ESSENTIAL SETTINGS ONLY**: Printer, Paper Size, DPI (203-300)
+  - **AUTO-CALCULATION**: All font sizes, barcode dimensions, and positions calculated automatically
+  - **ALWAYS CORRECT LAYOUT**: Number always appears above barcode automatically
+  - Default DPI set to 203 (optimal for XPRINTER XP-370B)
+  - Removed: thermal level, text size, barcode size, 2x1 mode toggle, position controls, dimension controls, font size controls, bar width settings
+  - Clean build: 0 Errors, 0 Warnings
+  - **Result**: Much simpler to use - just select printer and paper size, everything else is automatic!
+
 - 2025-11-07: **Auto Paper Size Detection & Persistent Settings**
   - **NEW FEATURE**: Automatic detection of paper sizes from selected printer (XPRINTER XP-370B compatible)
   - Added PaperSizeComboBox to select from available paper sizes automatically

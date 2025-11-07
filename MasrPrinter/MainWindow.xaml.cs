@@ -150,19 +150,6 @@ namespace MasrPrinter
             PaperWidthTextBox.Text = settings.PaperWidth.ToString();
             PaperHeightTextBox.Text = settings.PaperHeight.ToString();
             BarcodeQualitySlider.Value = settings.BarcodeQuality;
-            ThermalLevelSlider.Value = settings.ThermalLevel;
-            TextSizeTextBox.Text = settings.TextSize.ToString();
-            BarcodeSizeTextBox.Text = settings.BarcodeSize.ToString();
-            
-            Enable2x1CheckBox.IsChecked = settings.Enable2x1Mode;
-            BarcodePositionXTextBox.Text = settings.BarcodePositionX.ToString();
-            BarcodePositionYTextBox.Text = settings.BarcodePositionY.ToString();
-            NumberFontSizeTextBox.Text = settings.NumberFontSize.ToString();
-            HashtagFontSizeTextBox.Text = settings.HashtagFontSize.ToString();
-            BarcodeHeightTextBox.Text = settings.BarcodeHeightMM.ToString();
-            BarcodeWidthTextBox.Text = settings.BarcodeWidthMM.ToString();
-            NarrowBarWidthTextBox.Text = settings.NarrowBarWidth.ToString();
-            WideBarWidthTextBox.Text = settings.WideBarWidth.ToString();
             
             CustomTextBox.Text = settings.CustomNumber;
             
@@ -292,7 +279,7 @@ namespace MasrPrinter
             g.Clear(System.Drawing.Color.White);
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-            int fontSize = settings.NumberFontSize;
+            int fontSize = (int)(Math.Min(width, height * 0.25f) / 3.5f);
             using var font = new System.Drawing.Font("Tahoma", fontSize, System.Drawing.FontStyle.Bold, GraphicsUnit.Point);
             var textSize = g.MeasureString(text, font);
             float textX = (width - textSize.Width) / 2;
@@ -341,39 +328,6 @@ namespace MasrPrinter
                 }
 
                 settings.BarcodeQuality = (int)BarcodeQualitySlider.Value;
-                settings.ThermalLevel = (int)ThermalLevelSlider.Value;
-                
-                if (int.TryParse(TextSizeTextBox.Text, out int textSize))
-                    settings.TextSize = textSize;
-                
-                if (int.TryParse(BarcodeSizeTextBox.Text, out int barcodeSize))
-                    settings.BarcodeSize = barcodeSize;
-                
-                settings.Enable2x1Mode = Enable2x1CheckBox.IsChecked == true;
-                
-                if (int.TryParse(BarcodePositionXTextBox.Text, out int posX))
-                    settings.BarcodePositionX = posX;
-                
-                if (int.TryParse(BarcodePositionYTextBox.Text, out int posY))
-                    settings.BarcodePositionY = posY;
-                
-                if (int.TryParse(NumberFontSizeTextBox.Text, out int numSize))
-                    settings.NumberFontSize = numSize;
-                
-                if (int.TryParse(HashtagFontSizeTextBox.Text, out int hashSize))
-                    settings.HashtagFontSize = hashSize;
-                
-                if (int.TryParse(BarcodeHeightTextBox.Text, out int bHeight))
-                    settings.BarcodeHeightMM = bHeight;
-                
-                if (int.TryParse(BarcodeWidthTextBox.Text, out int bWidth))
-                    settings.BarcodeWidthMM = bWidth;
-                
-                if (int.TryParse(NarrowBarWidthTextBox.Text, out int narrowWidth))
-                    settings.NarrowBarWidth = narrowWidth;
-                
-                if (int.TryParse(WideBarWidthTextBox.Text, out int wideWidth))
-                    settings.WideBarWidth = wideWidth;
 
                 if (PrinterComboBox.SelectedItem != null)
                 {
@@ -476,7 +430,7 @@ namespace MasrPrinter
             g.Clear(System.Drawing.Color.White);
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-            int fontSize = settings.NumberFontSize;
+            int fontSize = (int)(Math.Min(width, height * 0.25f) / 3.5f);
             using var font = new System.Drawing.Font("Tahoma", fontSize, System.Drawing.FontStyle.Bold, GraphicsUnit.Point);
             var textSize = g.MeasureString(text, font);
             float textX = (width - textSize.Width) / 2;
