@@ -5,13 +5,11 @@ using System.Windows.Controls;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Media.Imaging;
-using System.Linq;
 
 namespace MasrPrinter
 {
     public partial class MainWindow : Window
     {
-        private string currentBarcodeType = "Code128";
         private bool isBatchMode = true;
 
         public MainWindow()
@@ -149,13 +147,7 @@ namespace MasrPrinter
             var settings = PrinterSettings.Instance;
             PaperWidthTextBox.Text = settings.PaperWidth.ToString();
             PaperHeightTextBox.Text = settings.PaperHeight.ToString();
-            BarcodeQualitySlider.Value = settings.BarcodeQuality;
-            
             NumberFontSizeSlider.Value = settings.NumberFontSize;
-            HashtagFontSizeSlider.Value = settings.HashtagFontSize;
-            BarcodeWidthSlider.Value = settings.BarcodeWidthPercent;
-            BarcodeHeightSlider.Value = settings.BarcodeHeightPercent;
-            
             CustomTextBox.Text = settings.CustomNumber;
             
             if (!string.IsNullOrEmpty(settings.SelectedPrinter) && PrinterComboBox.Items.Contains(settings.SelectedPrinter))
@@ -169,7 +161,7 @@ namespace MasrPrinter
             }
         }
 
-        private void SizeSettings_Changed(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void NumberSize_Changed(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UpdatePreview();
         }
@@ -195,21 +187,6 @@ namespace MasrPrinter
             UpdatePreview();
         }
 
-        private void CustomBarcodeType_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            UpdatePreview();
-        }
-
-        private void WithBarcode_Changed(object sender, RoutedEventArgs e)
-        {
-            if (CustomBarcodeTypeComboBox != null)
-            {
-                bool isChecked = WithBarcodeCheckBox.IsChecked == true;
-                CustomBarcodeTypeComboBox.IsEnabled = isChecked;
-            }
-            UpdatePreview();
-        }
-
         private void UpdatePreview_Click(object sender, RoutedEventArgs e)
         {
             UpdatePreview();
@@ -229,9 +206,7 @@ namespace MasrPrinter
                         return;
                     }
 
-                    currentBarcodeType = BatchBarcodeTypeComboBox.SelectedIndex == 1 ? "QR" : "Code128";
-                    var barcodeImage = BarcodeGenerator.GenerateBarcodeImage(start.ToString(), currentBarcodeType);
-                    PreviewImage.Source = barcodeImage;
+                    PreviewImage.Source = GenerateNumberLabel(start.ToString());
                     PreviewPlaceholder.Visibility = Visibility.Collapsed;
                 }
                 else
@@ -242,20 +217,8 @@ namespace MasrPrinter
                         return;
                     }
 
-                    bool withBarcode = WithBarcodeCheckBox.IsChecked == true;
-                    currentBarcodeType = CustomBarcodeTypeComboBox.SelectedIndex == 1 ? "QR" : "Code128";
-
-                    if (withBarcode)
-                    {
-                        var barcodeImage = BarcodeGenerator.GenerateBarcodeImage(CustomTextBox.Text, currentBarcodeType);
-                        PreviewImage.Source = barcodeImage;
-                        PreviewPlaceholder.Visibility = Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        PreviewImage.Source = GenerateTextOnlyPreview(CustomTextBox.Text);
-                        PreviewPlaceholder.Visibility = Visibility.Collapsed;
-                    }
+                    PreviewImage.Source = GenerateNumberLabel(CustomTextBox.Text);
+                    PreviewPlaceholder.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception ex)
@@ -274,13 +237,18 @@ namespace MasrPrinter
             }
         }
 
-        private BitmapImage GenerateTextOnlyPreview(string text)
+        private BitmapImage GenerateNumberLabel(string number)
         {
             var settings = PrinterSettings.Instance;
-            int dpi = (int)settings.BarcodeQuality;
+            int dpi = 203;
 
-            int width = (int)(settings.PaperWidth * dpi / 25.4);
-            int height = (int)(settings.PaperHeight * dpi / 25.4);
+            if (!int.TryParse(PaperWidthTextBox.Text, out int paperWidth))
+                paperWidth = 30;
+            if (!int.TryParse(PaperHeightTextBox.Text, out int paperHeight))
+                paperHeight = 20;
+
+            int width = (int)(paperWidth * dpi / 25.4);
+            int height = (int)(paperHeight * dpi / 25.4);
 
             using var bitmap = new Bitmap(width, height);
             bitmap.SetResolution(dpi, dpi);
@@ -289,13 +257,17 @@ namespace MasrPrinter
             g.Clear(System.Drawing.Color.White);
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-            int fontSize = (int)(Math.Min(width, height * 0.25f) / 3.5f);
-            using var font = new System.Drawing.Font("Tahoma", fontSize, System.Drawing.FontStyle.Bold, GraphicsUnit.Point);
-            var textSize = g.MeasureString(text, font);
+            double fontSizeMultiplier = NumberFontSizeSlider != null ? NumberFontSizeSlider.Value / 100.0 : 1.0;
+            int baseFontSize = (int)(Math.Min(width, height) * 0.6);
+            int fontSize = (int)(baseFontSize * fontSizeMultiplier);
+
+            using var font = new System.Drawing.Font("Arial", fontSize, System.Drawing.FontStyle.Bold, GraphicsUnit.Pixel);
+            var textSize = g.MeasureString(number, font);
+            
             float textX = (width - textSize.Width) / 2;
             float textY = (height - textSize.Height) / 2;
 
-            g.DrawString(text, font, System.Drawing.Brushes.Black, textX, textY);
+            g.DrawString(number, font, System.Drawing.Brushes.Black, textX, textY);
 
             using var ms = new MemoryStream();
             bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
@@ -337,12 +309,7 @@ namespace MasrPrinter
                     return;
                 }
 
-                settings.BarcodeQuality = (int)BarcodeQualitySlider.Value;
-                
                 settings.NumberFontSize = (int)NumberFontSizeSlider.Value;
-                settings.HashtagFontSize = (int)HashtagFontSizeSlider.Value;
-                settings.BarcodeWidthPercent = (int)BarcodeWidthSlider.Value;
-                settings.BarcodeHeightPercent = (int)BarcodeHeightSlider.Value;
 
                 if (PrinterComboBox.SelectedItem != null)
                 {
@@ -387,12 +354,10 @@ namespace MasrPrinter
                         return;
                     }
 
-                    currentBarcodeType = BatchBarcodeTypeComboBox.SelectedIndex == 1 ? "QR" : "Code128";
-
                     for (int i = start; i <= end; i++)
                     {
                         string fileName = Path.Combine("prints", $"label_{i}.png");
-                        BarcodeGenerator.SaveLabel(i.ToString(), currentBarcodeType, fileName);
+                        SaveNumberLabel(i.ToString(), fileName);
                     }
 
                     MessageBox.Show($"تم حفظ {end - start + 1} ملف PNG بنجاح في مجلد prints!", 
@@ -405,20 +370,9 @@ namespace MasrPrinter
                         MessageBox.Show("الرجاء إدخال نص", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
-
-                    bool withBarcode = WithBarcodeCheckBox.IsChecked == true;
-                    currentBarcodeType = CustomBarcodeTypeComboBox.SelectedIndex == 1 ? "QR" : "Code128";
                     
                     string fileName = Path.Combine("prints", $"custom_{DateTime.Now:yyyyMMdd_HHmmss}.png");
-                    
-                    if (withBarcode)
-                    {
-                        BarcodeGenerator.SaveLabel(CustomTextBox.Text, currentBarcodeType, fileName);
-                    }
-                    else
-                    {
-                        SaveTextOnlyLabel(CustomTextBox.Text, fileName);
-                    }
+                    SaveNumberLabel(CustomTextBox.Text, fileName);
 
                     MessageBox.Show($"تم حفظ الملف بنجاح في:\n{fileName}", 
                         "نجاح", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -430,10 +384,10 @@ namespace MasrPrinter
             }
         }
 
-        private void SaveTextOnlyLabel(string text, string fileName)
+        private void SaveNumberLabel(string number, string fileName)
         {
             var settings = PrinterSettings.Instance;
-            int dpi = (int)settings.BarcodeQuality;
+            int dpi = 203;
 
             int width = (int)(settings.PaperWidth * dpi / 25.4);
             int height = (int)(settings.PaperHeight * dpi / 25.4);
@@ -445,13 +399,17 @@ namespace MasrPrinter
             g.Clear(System.Drawing.Color.White);
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-            int fontSize = (int)(Math.Min(width, height * 0.25f) / 3.5f);
-            using var font = new System.Drawing.Font("Tahoma", fontSize, System.Drawing.FontStyle.Bold, GraphicsUnit.Point);
-            var textSize = g.MeasureString(text, font);
+            double fontSizeMultiplier = settings.NumberFontSize / 100.0;
+            int baseFontSize = (int)(Math.Min(width, height) * 0.6);
+            int fontSize = (int)(baseFontSize * fontSizeMultiplier);
+
+            using var font = new System.Drawing.Font("Arial", fontSize, System.Drawing.FontStyle.Bold, GraphicsUnit.Pixel);
+            var textSize = g.MeasureString(number, font);
+            
             float textX = (width - textSize.Width) / 2;
             float textY = (height - textSize.Height) / 2;
 
-            g.DrawString(text, font, System.Drawing.Brushes.Black, textX, textY);
+            g.DrawString(number, font, System.Drawing.Brushes.Black, textX, textY);
 
             bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
         }
@@ -477,15 +435,13 @@ namespace MasrPrinter
                         return;
                     }
 
-                    currentBarcodeType = BatchBarcodeTypeComboBox.SelectedIndex == 1 ? "QR" : "Code128";
-
                     PrintProgressBar.Maximum = end - start + 1;
                     PrintProgressBar.Value = 0;
 
                     for (int i = start; i <= end; i++)
                     {
                         string fileName = Path.Combine("prints", $"label_{i}.png");
-                        BarcodeGenerator.SaveLabel(i.ToString(), currentBarcodeType, fileName);
+                        SaveNumberLabel(i.ToString(), fileName);
                         
                         PrintLabel(fileName);
                         
@@ -507,21 +463,9 @@ namespace MasrPrinter
                         MessageBox.Show("الرجاء إدخال نص", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
-
-                    bool withBarcode = WithBarcodeCheckBox.IsChecked == true;
-                    currentBarcodeType = CustomBarcodeTypeComboBox.SelectedIndex == 1 ? "QR" : "Code128";
                     
                     string fileName = Path.Combine("prints", $"custom_{DateTime.Now:yyyyMMdd_HHmmss}.png");
-                    
-                    if (withBarcode)
-                    {
-                        BarcodeGenerator.SaveLabel(CustomTextBox.Text, currentBarcodeType, fileName);
-                    }
-                    else
-                    {
-                        SaveTextOnlyLabel(CustomTextBox.Text, fileName);
-                    }
-
+                    SaveNumberLabel(CustomTextBox.Text, fileName);
                     PrintLabel(fileName);
 
                     MessageBox.Show("تمت الطباعة بنجاح!", "نجاح", MessageBoxButton.OK, MessageBoxImage.Information);
