@@ -100,9 +100,18 @@ The unified interface contains:
 All generated labels are saved to the `prints/` folder as PNG images.
 
 ## Recent Changes
+- 2025-11-07: **Improved Barcode Visibility on Small Labels**
+  - **ENHANCEMENT**: Increased barcode size to 90% of label width for better visibility
+  - Optimized space allocation between number and barcode
+  - Increased minimum barcode size to 120x50 pixels (Code128) and 60x60 (QR)
+  - Reduced margins to maximize barcode display area
+  - Better font sizing for numbers (height/4.5 for optimal balance)
+  - Clean build: 0 Errors, 0 Warnings
+  - **Result**: Barcodes now clearly visible on 30x20mm labels!
+
 - 2025-11-07: **Fixed Barcode Generation for Small Labels**
   - **BUG FIX**: Resolved "Parameter is not valid" error for small paper sizes
-  - Added minimum size validation for barcode dimensions (100x40 pixels for Code128, 50x50 for QR)
+  - Added minimum size validation for barcode dimensions
   - Prevents invalid/negative dimensions that caused crashes
   - Ensures barcodes always render correctly regardless of paper size
   - Clean build: 0 Errors, 0 Warnings

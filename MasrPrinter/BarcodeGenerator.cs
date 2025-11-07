@@ -94,18 +94,19 @@ namespace MasrPrinter
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                 graphics.Clear(Color.White);
 
-                int topMargin = (int)(height * 0.08f);
+                int topMargin = (int)(height * 0.1f);
                 int leftMargin = (int)(width * 0.05f);
                 int rightMargin = (int)(width * 0.05f);
                 
-                int numberFontSize = (int)(Math.Min(width, height) / 3.5f);
+                int numberFontSize = (int)(height / 4.5f);
+                numberFontSize = Math.Max(numberFontSize, 10);
                 using var numberFont = new Font("Arial", numberFontSize, FontStyle.Bold, GraphicsUnit.Point);
                 
                 float numberX = leftMargin;
                 float numberY = topMargin;
                 graphics.DrawString(number, numberFont, Brushes.Black, numberX, numberY);
                 
-                int hashtagFontSize = (int)(numberFontSize * 0.9f);
+                int hashtagFontSize = (int)(numberFontSize * 0.85f);
                 using var hashtagFont = new Font("Arial", hashtagFontSize, FontStyle.Bold, GraphicsUnit.Point);
                 var hashtagSize = graphics.MeasureString("#", hashtagFont);
                 float hashtagX = width - rightMargin - hashtagSize.Width;
@@ -113,23 +114,25 @@ namespace MasrPrinter
                 graphics.DrawString("#", hashtagFont, Brushes.Black, hashtagX, hashtagY);
 
                 var numberSize = graphics.MeasureString(number, numberFont);
-                int barcodeGap = (int)(height * 0.08f);
+                int barcodeGap = (int)(height * 0.05f);
                 int barcodeY = (int)(numberY + numberSize.Height + barcodeGap);
+                
+                int bottomMargin = (int)(height * 0.05f);
+                int availableHeight = height - barcodeY - bottomMargin;
                 
                 int barcodeWidth, barcodeHeight;
                 if (barcodeType == "QR")
                 {
-                    int availableSpace = Math.Min((int)(width * 0.85f), height - barcodeY - (int)(height * 0.05f));
-                    availableSpace = Math.Max(availableSpace, 50);
-                    barcodeWidth = barcodeHeight = availableSpace;
+                    int size = Math.Min((int)(width * 0.90f), availableHeight);
+                    size = Math.Max(size, 60);
+                    barcodeWidth = barcodeHeight = size;
                 }
                 else
                 {
-                    barcodeWidth = (int)(width * 0.85f);
-                    barcodeWidth = Math.Max(barcodeWidth, 100);
+                    barcodeWidth = (int)(width * 0.90f);
+                    barcodeWidth = Math.Max(barcodeWidth, 120);
                     
-                    barcodeHeight = Math.Min((int)(height * 0.5f), height - barcodeY - (int)(height * 0.05f));
-                    barcodeHeight = Math.Max(barcodeHeight, 40);
+                    barcodeHeight = Math.Max(availableHeight, 50);
                 }
                 
                 int barcodeX = (width - barcodeWidth) / 2;
